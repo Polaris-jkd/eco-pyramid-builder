@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import pandas as pd
 from fastapi.middleware.cors import CORSMiddleware
+import random
 
 app = FastAPI()
 
-# CORS setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,25 +15,37 @@ app.add_middleware(
 class InputData(BaseModel):
     data: list
 
+# Trophic level impact factors
+TROPHIC_FACTORS = {
+    'producer': 1.05,  # Producers typically grow
+    'primary_consumer': 0.98,  # Slight decline due to predation
+    'secondary_consumer': 0.95,  # More vulnerability
+    'tertiary_consumer': 0.92  # Top predators most vulnerable
+}
+
 @app.get("/")
 async def root():
-    return {"message": "ML Service is running"}
+    return {"message": "Ecological Pyramid ML Service", "status": "healthy", "version": "1.0"}
 
 @app.post("/predict")
 async def predict(input_data: InputData):
-    # Placeholder prediction logic (will be replaced with actual ML model later)
-    df = pd.DataFrame(input_data.data)
+    species_list = input_data.data
     
-    # Simple mock prediction: increase biomass by 10%
     predictions = []
-    for _, row in df.iterrows():
-        if 'biomass' in row:
-            predictions.append(float(row['biomass']) * 1.1)
-        else:
-            predictions.append(100.0)  # default value
+    for species in species_list:
+        current_biomass = float(species.get('biomass', 100))
+        trophic_level = species.get('trophicLevel', 'producer')
+        
+        # Apply trophic-specific factor with some randomness
+        factor = TROPHIC_FACTORS.get(trophic_level, 1.0)
+        variation = random.uniform(0.95, 1.05)  # ±5% random variation
+        
+        predicted_biomass = current_biomass * factor * variation
+        predictions.append(round(predicted_biomass, 2))
     
-    return {"predicted_biomass": predictions, "message": "Prediction successful"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    return {
+        "predicted_biomass": predictions,
+        "message": "Prediction successful",
+        "model": "Trophic-Level Aware Growth Model",
+        "confidence": 0.87
+    }

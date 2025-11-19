@@ -46,4 +46,15 @@ router.get('/pyramids', async (req, res) => {
   }
 });
 
+// Add this route with the other routes
+router.delete('/species/:id', async (req, res) => {
+  try {
+    await Species.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Species deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 export default router;
