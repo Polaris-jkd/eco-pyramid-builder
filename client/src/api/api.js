@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+// Environment-based API base URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-// Health check
+// Health check (optional)
 export const testConnection = async () => {
   const response = await axios.get(`${API_BASE_URL}/health`);
   return response.data;
@@ -19,15 +20,12 @@ export const addSpecies = async (speciesData) => {
   return response.data;
 };
 
-// deleteSpecies function
-
 export const deleteSpecies = async (id) => {
   const response = await axios.delete(`${API_BASE_URL}/species/${id}`);
   return response.data;
 };
 
-
-// Pyramid endpoints
+// Pyramid endpoints (if using pyramid saving features)
 export const getAllPyramids = async () => {
   const response = await axios.get(`${API_BASE_URL}/pyramids`);
   return response.data;

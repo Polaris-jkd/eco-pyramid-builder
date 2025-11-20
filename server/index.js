@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import pyramidRoutes from './routes/pyramidRoutes.js';
+import fetch from 'node-fetch';
+
 
 dotenv.config();
 
@@ -41,6 +43,38 @@ app.post("/api/predict", async (req, res) => {
       details: err.message 
     });
   }
+});
+
+// ML prediction route
+app.post('/api/predict', async (req, res) => {
+  try {
+    const { data } = req.body;
+    
+    console.log('Prediction request received:', data.length, 'species');
+
+    // Call ML service
+    const mlResponse = await fetch('http://localhost:8000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data })
+    });
+    
+    if (!response.ok) {
+      throw new Error('ML service error');
+    }
+    
+    const result = await response.json();
+    console.log('ML prediction result:', result);
+    
+    res.json(result);
+  } catch (error) {
+    console.error('Prediction error:', error);
+    res.status(500).json({ 
+      message: 'Prediction failed',
+      error: error.message 
+    });
+  }
+      
 });
 
 app.listen(PORT, () => console.log(`✅ Node backend running at http://localhost:${PORT}`));

@@ -10,7 +10,7 @@ export default function Builder() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [temperature, setTemperature] = useState(20);
+  const [temperature, setTemperature] = useState(20); //celsius
 
   useEffect(() => {
     loadSpecies();
@@ -154,38 +154,24 @@ export default function Builder() {
 
         <div className="control-group">
           <label>Load Template:</label>
-          <select 
-            onChange={(e) => loadBiomeTemplate(e.target.value)} 
-            defaultValue=""
-            className="biome-select"
-          >
-            <option value="">Select Biome...</option>
-            <option value="grassland">🌾 Grassland</option>
-            <option value="forest">🌲 Forest</option>
-            <option value="aquatic">🌊 Aquatic</option>
-            <option value="desert">🏜️ Desert</option>
-            <option value="tundra">❄️ Tundra</option>
-          </select>
+            <select onChange={(e) => loadBiomeTemplate(e.target.value)} defaultValue="">
+              <option value="">Select Biome...</option>
+              <option value="grassland">🌾 Grassland</option>
+              <option value="forest">🌲 Forest</option>
+              <option value="aquatic">🌊 Aquatic</option>
+              <option value="desert">🏜️ Desert</option>
+              <option value="tundra">❄️ Tundra</option>
+            </select>
         </div>
 
         <div className="control-group">
           <button onClick={clearPyramid} className="clear-btn">
             🗑️ Clear All
           </button>
-          <button 
-            className="predict-btn"
-            onClick={handlePredict}
-            disabled={loading || species.length === 0}
-          >
-            {loading ? '🔄 Analyzing...' : '🤖 AI Predict Changes'}
-          </button>
         </div>
-      </div>
-
-      {/* Environmental Scenarios */}
-      <div className="scenario-panel">
-        <h4>🌡️ Environmental Scenarios</h4>
-        <div className="scenario-controls">
+        
+        <div className="scenario-section">
+          <h4>🌡️ Environmental Scenarios</h4>
           <div className="scenario-control">
             <label>Temperature: {temperature}°C</label>
             <input 
@@ -194,14 +180,8 @@ export default function Builder() {
               max="50" 
               value={temperature}
               onChange={(e) => setTemperature(Number(e.target.value))}
-              className="scenario-slider"
             />
-            <small>
-              {temperature < 0 && '❄️ Freezing conditions - Producer growth slows'}
-              {temperature >= 0 && temperature < 15 && '🌡️ Cold - Reduced metabolic activity'}
-              {temperature >= 15 && temperature < 30 && '☀️ Optimal conditions for growth'}
-              {temperature >= 30 && '🔥 Hot - Heat stress on organisms'}
-            </small>
+            <small>Affects producer growth rate</small>
           </div>
         </div>
       </div>
@@ -217,37 +197,6 @@ export default function Builder() {
             pyramidType={pyramidType}
           />
           
-          {prediction && (
-            <div className="prediction-panel">
-              <h4>🤖 AI Prediction Results</h4>
-              <div className="prediction-stats">
-                {prediction.predicted_biomass && prediction.predicted_biomass.map((value, idx) => {
-                  const currentSpecies = species[idx];
-                  if (!currentSpecies) return null;
-                  
-                  const currentBiomass = currentSpecies.biomass;
-                  const change = ((value - currentBiomass) / currentBiomass * 100);
-                  const isIncrease = change > 0;
-                  
-                  return (
-                    <div key={idx} className="stat-item">
-                      <span className="stat-name">{currentSpecies.icon} {currentSpecies.name}</span>
-                      <div className="stat-details">
-                        <span className="stat-value">{value.toFixed(2)} kg/m²</span>
-                        <span className={`stat-change ${isIncrease ? 'positive' : 'negative'}`}>
-                          {isIncrease ? '↗' : '↘'} {Math.abs(change).toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="prediction-info">
-                <strong>Model:</strong> {prediction.model} | 
-                <strong> Confidence:</strong> {(prediction.confidence * 100).toFixed(0)}%
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -71,27 +71,30 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
     return groupedSpecies[level].reduce((sum, s) => sum + calculateValue(s), 0);
   };
 
-  // THIS IS THE KEY FIX: Calculate proper pyramid widths
+  //Calculate proper pyramid widths
   const calculatePyramidWidth = () => {
-    const levels = ['producer', 'primary_consumer', 'secondary_consumer', 'tertiary_consumer'];
-    const totals = levels.map(level => getTotalForLevel(level));
-    
-    // Get max value for scaling
-    const maxValue = Math.max(...totals, 1);
-    
-    // Calculate widths: each level gets width proportional to its value
-    // This creates the proper pyramid shape
-    const widths = {};
-    levels.forEach((level, index) => {
-      const value = totals[index];
-      // Width in percentage: (value / maxValue) * 90 (leaving 10% margin)
-      // Minimum 80px to keep visibility
-      const widthPercent = (value / maxValue) * 85 + 5; // 5-90% range
-      widths[level] = widthPercent;
-    });
-    
-    return widths;
-  };
+  const levels = ['producer', 'primary_consumer', 'secondary_consumer', 'tertiary_consumer'];
+  const totals = levels.map(level => getTotalForLevel(level));
+  
+  // Get the BASE value (producers - should be largest)
+  const baseValue = totals[0] || 1; // First level = producers
+  
+  // Calculate widths based on ratio to base
+  const widths = {};
+  levels.forEach((level, index) => {
+    const value = totals[index];
+    if (value === 0) {
+      widths[level] = 0; // Empty level
+    } else {
+      // Width as percentage of base (producers = 100%)
+      const percentage = (value / baseValue) * 100;
+      // Ensure minimum 15% visibility, max 100%
+      widths[level] = Math.max(Math.min(percentage, 100), 15);
+    }
+  });
+  
+  return widths;
+};
 
   const pyramidWidths = calculatePyramidWidth();
 
@@ -122,7 +125,7 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
                 key={level}
                 className={`pyramid-level ${dragOver === level ? 'drag-over' : ''} ${levelSpecies.length === 0 ? 'empty-level' : ''}`}
                 style={{
-                  width: `${widthPercent}%`,
+                  width: '100%',
                   backgroundColor: TROPHIC_COLORS[level],
                   minHeight: levelSpecies.length > 0 ? 'auto' : '60px'
                 }}
@@ -139,7 +142,7 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
                   <>
                     <div className="level-species">
                       {levelSpecies.map((s) => (
-                        <div key={s._id} className="species-chip">
+                        <div className="species-chip">
                           <span>{s.icon || '🔹'} {s.name}</span>
                           <span className="species-value">
                             {calculateValue(s).toFixed(1)}
@@ -156,6 +159,7 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
                             ×
                           </button>
                         </div>
+
                       ))}
                     </div>
                     
