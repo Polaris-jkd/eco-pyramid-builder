@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Environment-based API base URL
 // NO /api suffix - backend routes already include it
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Health check (optional)
 export const testConnection = async () => {
