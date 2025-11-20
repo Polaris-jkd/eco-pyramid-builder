@@ -828,3 +828,18 @@ body {
     font-size: 0.8125rem;
   }
 }
+
+/* Force 3 feature cards in same row */
+.features {
+  grid-template-columns: repeat(3, 1fr) !important;
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Responsive: Stack on smaller screens */
+@media (max-width: 900px) {
+  .features {
+    grid-template-columns: 1fr !important;
+  }
+}
