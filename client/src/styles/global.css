@@ -23,6 +23,46 @@
   --transition: 0.2s ease;
 }
 
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  --bg-canvas: #1a1a1a;
+  --bg-white: #2d2d2d;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a0a0a0;
+  --accent-green: #4ade80;
+  --accent-teal: #2dd4bf;
+  --border-light: #404040;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Theme Toggle Button */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-canvas);
@@ -513,6 +553,85 @@ body {
 }
 
 /* ============================================
+   HOME PAGE STYLING
+   ============================================ */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--accent-green);
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  display: inline-block;
+  background: var(--accent-green);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.cta-button:hover {
+  background: #235024;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.feature-card {
+  background: var(--bg-white);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--accent-green);
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+
+/* ============================================
    PREDICTION PANEL
    ============================================ */
 .prediction-results {
@@ -619,3 +738,113 @@ body {
     max-height: 400px;
   }
 }
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  /* Navbar */
+  .nav-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-size: 1.1rem;
+  }
+
+  .nav-right {
+    gap: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+  }
+
+  /* Home Page */
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Builder Page */
+  .builder-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .topbar-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .biome-select-compact,
+  .clear-btn-compact,
+  .predict-btn-compact {
+    width: 100%;
+  }
+
+  .pyramid-type-bar {
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+  }
+
+  .builder-main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-area {
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    max-height: 50vh;
+  }
+
+  .pyramid-container {
+    padding: 1rem;
+  }
+
+  .species-chips-grid {
+    flex-direction: column;
+  }
+
+  .prediction-results {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+  }
+
+  .biomass-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .builder-title {
+    font-size: 1.25rem;
+  }
+
+  .pyramid-type-btn {
+    flex: 1;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
