@@ -45,7 +45,7 @@ Guru Gobind Singh Indraprastha University, Delhi
 ---
 
 ## 📁 Project Structure
-
+```
 eco-pyramid-builder/
 ├── client/ # React frontend (Vite)
 │ ├── src/
@@ -63,7 +63,7 @@ eco-pyramid-builder/
 └── ml-service/ # Python ML service (FastAPI)
 ├── app.py # FastAPI application
 ├── requirements.txt # Python dependencies
-
+```
 ---
 
 ## 🚀 Local Setup
