@@ -4,12 +4,30 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import pyramidRoutes from './routes/pyramidRoutes.js';
 import fetch from 'node-fetch';
-
+import cors from 'cors'; 
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+//CORS MIDDLEWARE
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost
+    if (origin.includes('localhost')) return callback(null, true);
+    
+    // Allow all Vercel domains
+    if (origin.includes('vercel.app')) return callback(null, true);
+    
+    // Allow all
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 // Middleware
 app.use(express.json());
