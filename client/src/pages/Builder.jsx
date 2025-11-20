@@ -10,7 +10,6 @@ export default function Builder() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  // ❌ REMOVED: const [temperature, setTemperature] = useState(20);
 
   useEffect(() => {
     loadSpecies();
@@ -73,12 +72,10 @@ export default function Builder() {
     const biome = BIOME_TEMPLATES[biomeKey];
     setError(`Loading ${biome.name}...`);
 
-    // Clear existing species first
     for (const s of species) {
       await handleRemoveSpecies(s);
     }
 
-    // Add biome species
     for (const speciesData of biome.species) {
       await handleAddSpecies(speciesData);
     }
@@ -115,72 +112,70 @@ export default function Builder() {
   };
 
   return (
-    <div className="builder-page">
-      <div className="builder-header">
-        <h1>🌿 Ecological Pyramid Builder</h1>
-        <p>Drag & drop species to build interactive food pyramids</p>
-      </div>
-
-      {error && <div className="error-banner">{error}</div>}
-
-      <div className="builder-controls">
-        <div className="control-group">
-          <label>Pyramid Type:</label>
-          <div className="button-group">
-            <button
-              className={`type-btn ${pyramidType === 'energy' ? 'active' : ''}`}
-              onClick={() => setPyramidType('energy')}
-            >
-              ⚡ Energy
-            </button>
-            <button
-              className={`type-btn ${pyramidType === 'biomass' ? 'active' : ''}`}
-              onClick={() => setPyramidType('biomass')}
-            >
-              🏔️ Biomass
-            </button>
-            <button
-              className={`type-btn ${pyramidType === 'numbers' ? 'active' : ''}`}
-              onClick={() => setPyramidType('numbers')}
-            >
-              🔢 Numbers
-            </button>
-          </div>
+    <div className="builder-container">
+      {/* Top Controls Bar */}
+      <div className="builder-topbar">
+        <div className="topbar-left">
+          <h1 className="builder-title">🌿 Ecological Pyramid Builder</h1>
         </div>
-
-        <div className="control-group">
-          <label>Load Biome Template:</label>
-          <select className="biome-select" onChange={(e) => loadBiomeTemplate(e.target.value)}>
-            <option value="">-- Choose Biome --</option>
+        
+        <div className="topbar-controls">
+          <select 
+            className="biome-select-compact" 
+            onChange={(e) => loadBiomeTemplate(e.target.value)}
+            defaultValue=""
+          >
+            <option value="" disabled>Load Biome Template</option>
             <option value="grassland">🌾 Grassland</option>
             <option value="forest">🌲 Forest</option>
             <option value="aquatic">🌊 Aquatic</option>
             <option value="desert">🏜️ Desert</option>
             <option value="tundra">❄️ Tundra</option>
           </select>
-        </div>
 
-        <div className="control-group">
-          <button className="clear-btn" onClick={clearPyramid}>
+          <button className="clear-btn-compact" onClick={clearPyramid}>
             🗑️ Clear All
           </button>
-        </div>
 
-        <div className="control-group">
           <button
-            className="predict-btn"
+            className="predict-btn-compact"
             onClick={handlePredict}
             disabled={loading || species.length === 0}
           >
-            {loading ? '🔮 Predicting...' : '🤖 Predict Biomass'}
+            {loading ? '🔮 Predicting...' : '🤖 Predict'}
           </button>
         </div>
       </div>
 
-      {/* ✅ SWAPPED LAYOUT: Canvas LEFT, Sidebar RIGHT (Infinite Craft style) */}
-      <div className="builder-layout">
-        {/* MAIN CANVAS - NOW FIRST (LEFT SIDE) */}
-        <div className="main-canvas">
+      {/* Pyramid Type Selector */}
+      <div className="pyramid-type-bar">
+        <button
+          className={`pyramid-type-btn ${pyramidType === 'energy' ? 'active' : ''}`}
+          onClick={() => setPyramidType('energy')}
+        >
+          ⚡ Energy
+        </button>
+        <button
+          className={`pyramid-type-btn ${pyramidType === 'biomass' ? 'active' : ''}`}
+          onClick={() => setPyramidType('biomass')}
+        >
+          🏔️ Biomass
+        </button>
+        <button
+          className={`pyramid-type-btn ${pyramidType === 'numbers' ? 'active' : ''}`}
+          onClick={() => setPyramidType('numbers')}
+        >
+          🔢 Numbers
+        </button>
+      </div>
+
+      {/* Error/Status Banner */}
+      {error && <div className="status-banner">{error}</div>}
+
+      {/* Main Layout: Canvas + Sidebar */}
+      <div className="builder-main-layout">
+        {/* LEFT: Pyramid Canvas */}
+        <div className="canvas-area">
           <PyramidCanvas
             species={species}
             onRemoveSpecies={handleRemoveSpecies}
@@ -189,33 +184,42 @@ export default function Builder() {
           />
         </div>
 
-        {/* SIDEBAR - NOW SECOND (RIGHT SIDE) */}
-        <SpeciesSidebar onAddSpecies={handleAddSpecies} />
+        {/* RIGHT: Species Sidebar */}
+        <div className="sidebar-area">
+          <SpeciesSidebar onAddSpecies={handleAddSpecies} />
+        </div>
       </div>
 
-      {/* ❌ REMOVED: Temperature Scenario Panel */}
-
+      {/* Prediction Results Panel */}
       {prediction && (
-        <div className="prediction-panel">
-          <h4>🔮 Prediction Results</h4>
-          <div className="prediction-stats">
-            <div className="stat-item">
-              <span className="stat-name">Model</span>
-              <div className="stat-details">
-                <span className="stat-value">{prediction.model}</span>
+        <div className="prediction-results">
+          <div className="prediction-header">
+            <h3>🔮 AI Prediction Results</h3>
+            <button className="close-prediction" onClick={() => setPrediction(null)}>×</button>
+          </div>
+          <div className="prediction-body">
+            <div className="prediction-meta">
+              <div className="meta-item">
+                <span className="meta-label">Model</span>
+                <span className="meta-value">{prediction.model}</span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">Confidence</span>
+                <span className="meta-value">{Math.round(prediction.confidence * 100)}%</span>
               </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-name">Confidence</span>
-              <div className="stat-details">
-                <span className="stat-value">{Math.round(prediction.confidence * 100)}%</span>
+            <div className="prediction-data">
+              <h4>Predicted Biomass Values:</h4>
+              <div className="biomass-grid">
+                {prediction.predicted_biomass.map((val, idx) => (
+                  <div key={idx} className="biomass-item">
+                    <span className="biomass-index">Species {idx + 1}</span>
+                    <span className="biomass-value">{val.toFixed(2)} kg/m²</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          <p className="prediction-info">{prediction.message}</p>
-          <pre style={{ background: '#f9fafb', padding: '1rem', borderRadius: '8px', overflow: 'auto' }}>
-            {JSON.stringify(prediction.predicted_biomass, null, 2)}
-          </pre>
         </div>
       )}
     </div>
