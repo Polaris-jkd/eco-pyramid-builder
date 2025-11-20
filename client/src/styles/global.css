@@ -497,10 +497,9 @@ input, select {
 /* Main Layout */
 .builder-layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 1fr 320px;  /* Main canvas left (1fr), Sidebar right (320px) */
   gap: 2rem;
 }
-
 /* Species Sidebar */
 .species-sidebar {
   background: white;
