@@ -10,7 +10,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-//CORS MIDDLEWARE
+// ============================================
+// CORS MIDDLEWARE
+// ============================================
 app.use(cors({
   origin: function(origin, callback) {
     // Allow requests with no origin (like mobile apps or Postman)
@@ -28,17 +30,22 @@ app.use(cors({
   credentials: true
 }));
 
-// Middleware
+// ============================================
+// MIDDLEWARE
+// ============================================
 app.use(express.json());
-app.use(cors());
 app.use('/api', pyramidRoutes);
 
-// Connect to MongoDB
+// ============================================
+// CONNECT TO MONGODB
+// ============================================
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// Test route with database status
+// ============================================
+// HEALTH CHECK ROUTE
+// ============================================
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
@@ -47,51 +54,52 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Prediction route
-app.post("/api/predict", async (req, res) => {
-  try {
-    res.status(200).send({ 
-      message: "Prediction endpoint ready",
-      data: req.body 
-    });
-  } catch (err) {
-    res.status(500).send({ 
-      error: "Prediction service error", 
-      details: err.message 
-    });
-  }
-});
-
-// ML prediction route
+// ============================================
+// ML PREDICTION ROUTE (FIXED - ONLY ONE NOW)
+// ============================================
 app.post('/api/predict', async (req, res) => {
   try {
     const { data } = req.body;
     
-    console.log('Prediction request received:', data.length, 'species');
+    console.log('📊 Prediction request received:', data?.length || 0, 'species');
 
-    // Call ML service
-    const mlResponse = await fetch('http://localhost:8000/predict', {
+    // Determine ML service URL based on environment
+    const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlEndpoint = `${ML_SERVICE_URL}/predict`;
+    
+    console.log('🤖 Calling ML service at:', mlEndpoint);
+
+    // Call ML service (FastAPI)
+    const mlResponse = await fetch(mlEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data })
     });
     
-    if (!response.ok) {
-      throw new Error('ML service error');
+    // FIXED: Use mlResponse (not "response")
+    if (!mlResponse.ok) {
+      const errorText = await mlResponse.text();
+      console.error('❌ ML service error:', errorText);
+      throw new Error(`ML service returned ${mlResponse.status}: ${errorText}`);
     }
     
-    const result = await response.json();
-    console.log('ML prediction result:', result);
+    // FIXED: Use mlResponse (not "response")
+    const result = await mlResponse.json();
+    console.log('✅ ML prediction result:', result);
     
     res.json(result);
+    
   } catch (error) {
-    console.error('Prediction error:', error);
+    console.error('❌ Prediction error:', error.message);
     res.status(500).json({ 
       message: 'Prediction failed',
-      error: error.message 
+      error: error.message,
+      hint: 'Make sure ML service is running at http://localhost:8000 (local) or set ML_SERVICE_URL env variable (production)'
     });
   }
-      
 });
 
+// ============================================
+// START SERVER
+// ============================================
 app.listen(PORT, () => console.log(`✅ Node backend running at http://localhost:${PORT}`));
