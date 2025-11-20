@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-// Environment-based API base URL
-// NO /api suffix - backend routes already include it
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Environment-based API base URL - NO /api suffix
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// Health check (optional)
+console.log('🔍 API Configuration:');
+console.log('  - Base URL:', API_BASE_URL);
+console.log('  - Species endpoint:', `${API_BASE_URL}/api/species`);
+
+// Health check
 export const testConnection = async () => {
   const response = await axios.get(`${API_BASE_URL}/api/health`);
   return response.data;
@@ -37,9 +40,8 @@ export const createPyramid = async (pyramidData) => {
   return response.data;
 };
 
-// ML prediction - Enhanced with proper format
+// ML prediction
 export const predictBiomass = async (speciesArray) => {
-  // Backend expects { data: [...] } format
   const payload = {
     data: speciesArray.map(s => ({
       name: s.name,
@@ -51,11 +53,9 @@ export const predictBiomass = async (speciesArray) => {
     }))
   };
   
-  console.log('Sending prediction request:', payload);
-  
+  console.log('📤 Sending prediction request:', payload);
   const response = await axios.post(`${API_BASE_URL}/predict`, payload);
-  
-  console.log('Prediction response:', response.data);
+  console.log('📥 Prediction response:', response.data);
   
   return response.data;
 };
