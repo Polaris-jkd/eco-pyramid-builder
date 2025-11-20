@@ -1,5 +1,5 @@
 /* ============================================
-   INFINITE CRAFT INSPIRED - CLEAN DESIGN
+   CLEAN DESIGN SYSTEM
    ============================================ */
 
 * {
@@ -9,6 +9,7 @@
 }
 
 :root {
+  /* Light Mode */
   --bg-canvas: #f5f7fa;
   --bg-white: #ffffff;
   --text-primary: #1a1a1a;
@@ -23,7 +24,7 @@
   --transition: 0.2s ease;
 }
 
-/* Dark Mode Variables */
+/* Dark Mode */
 [data-theme="dark"] {
   --bg-canvas: #1a1a1a;
   --bg-white: #2d2d2d;
@@ -34,33 +35,6 @@
   --border-light: #404040;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-}
-
-/* Theme Toggle Button */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.theme-toggle {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 1.25rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
 }
 
 body {
@@ -104,6 +78,12 @@ body {
   text-decoration: none;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;
@@ -120,8 +100,106 @@ body {
   color: white;
 }
 
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
 /* ============================================
-   BUILDER LAYOUT
+   HOME PAGE
+   ============================================ */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--accent-green);
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  display: inline-block;
+  background: var(--accent-green);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+  padding-bottom: 4rem;
+}
+
+.feature-card {
+  background: var(--bg-white);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   BUILDER PAGE
    ============================================ */
 .builder-container {
   flex: 1;
@@ -132,7 +210,6 @@ body {
   overflow: hidden;
 }
 
-/* Top Bar */
 .builder-topbar {
   background: var(--bg-white);
   border-bottom: 1px solid var(--border-light);
@@ -163,7 +240,8 @@ body {
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid var(--border-light);
-  background: white;
+  background: var(--bg-white);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all var(--transition);
 }
@@ -197,7 +275,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Pyramid Type Bar */
 .pyramid-type-bar {
   background: var(--bg-white);
   border-bottom: 1px solid var(--border-light);
@@ -210,7 +287,7 @@ body {
 .pyramid-type-btn {
   padding: 0.5rem 1.25rem;
   border: 1px solid var(--border-light);
-  background: white;
+  background: var(--bg-white);
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 500;
@@ -229,7 +306,6 @@ body {
   border-color: var(--accent-green);
 }
 
-/* Status Banner */
 .status-banner {
   background: #dbeafe;
   color: #1e40af;
@@ -238,7 +314,6 @@ body {
   text-align: center;
 }
 
-/* Main Layout */
 .builder-main-layout {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -306,7 +381,7 @@ body {
 }
 
 .species-card {
-  background: white;
+  background: var(--bg-white);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
   padding: 0.75rem;
@@ -340,6 +415,7 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  color: var(--text-primary);
 }
 
 .species-info small {
@@ -354,7 +430,7 @@ body {
 }
 
 /* ============================================
-   PYRAMID CANVAS (INFINITE CRAFT STYLE)
+   PYRAMID CANVAS
    ============================================ */
 .pyramid-container {
   background: var(--bg-white);
@@ -386,7 +462,6 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -421,7 +496,6 @@ body {
   font-weight: 500;
 }
 
-/* Pyramid Levels (WHITE CARDS, NOT COLORED BLOCKS) */
 .pyramid-levels {
   display: flex;
   flex-direction: column;
@@ -446,6 +520,10 @@ body {
   background: #fafafa;
 }
 
+[data-theme="dark"] .pyramid-level-card.empty-level {
+  background: #1f1f1f;
+}
+
 .level-header-row {
   display: flex;
   justify-content: space-between;
@@ -467,7 +545,6 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Species Chips Grid (WHITE CARDS) */
 .species-chips-grid {
   display: flex;
   flex-wrap: wrap;
@@ -476,7 +553,7 @@ body {
 }
 
 .species-chip-card {
-  background: #fafafa;
+  background: var(--bg-canvas);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
   padding: 0.75rem;
@@ -503,6 +580,7 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  color: var(--text-primary);
 }
 
 .species-chip-info small {
@@ -553,92 +631,13 @@ body {
 }
 
 /* ============================================
-   HOME PAGE STYLING
-   ============================================ */
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.hero {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--accent-green);
-}
-
-.hero p {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
-}
-
-.cta-button {
-  display: inline-block;
-  background: var(--accent-green);
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-
-.cta-button:hover {
-  background: #235024;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin: 3rem 0;
-}
-
-.feature-card {
-  background: var(--bg-white);
-  padding: 2rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  transition: all var(--transition);
-}
-
-.feature-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-}
-
-.feature-card h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--accent-green);
-}
-
-.feature-card p {
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-
-/* ============================================
    PREDICTION PANEL
    ============================================ */
 .prediction-results {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  background: white;
+  background: var(--bg-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   max-width: 450px;
@@ -739,16 +738,7 @@ body {
   }
 }
 
-/* ============================================
-   MOBILE RESPONSIVE
-   ============================================ */
 @media (max-width: 768px) {
-  /* Navbar */
-  .nav-container {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
   .nav-brand {
     font-size: 1.1rem;
   }
@@ -765,7 +755,6 @@ body {
     font-size: 0.875rem;
   }
 
-  /* Home Page */
   .hero h1 {
     font-size: 1.75rem;
   }
@@ -776,10 +765,8 @@ body {
 
   .features {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
 
-  /* Builder Page */
   .builder-topbar {
     flex-direction: column;
     align-items: stretch;
@@ -799,17 +786,6 @@ body {
 
   .pyramid-type-bar {
     flex-wrap: wrap;
-    padding: 0.75rem 1rem;
-  }
-
-  .builder-main-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar-area {
-    border-left: none;
-    border-top: 1px solid var(--border-light);
-    max-height: 50vh;
   }
 
   .pyramid-container {
@@ -823,7 +799,6 @@ body {
   .prediction-results {
     left: 1rem;
     right: 1rem;
-    bottom: 1rem;
     max-width: none;
   }
 
@@ -844,7 +819,5 @@ body {
   .pyramid-type-btn {
     flex: 1;
     font-size: 0.8125rem;
-    padding: 0.5rem 0.75rem;
   }
 }
-

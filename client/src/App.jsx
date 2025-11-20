@@ -12,12 +12,10 @@ function App() {
       <Router>
         <div className="app">
           <Navbar />
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/builder" element={<Builder />} />
-            </Routes>
-          </main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/builder" element={<Builder />} />
+          </Routes>
         </div>
       </Router>
     </ThemeProvider>
