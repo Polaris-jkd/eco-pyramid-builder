@@ -8,10 +8,10 @@ const TROPHIC_COLORS = {
 };
 
 const TROPHIC_LABELS = {
-  producer: 'Producers',
-  primary_consumer: 'Primary Consumers',
-  secondary_consumer: 'Secondary Consumers',
-  tertiary_consumer: 'Tertiary Consumers'
+  producer: '🌱 Producers',
+  primary_consumer: '🐰 Primary Consumers',
+  secondary_consumer: '🐍 Secondary Consumers',
+  tertiary_consumer: '🦅 Tertiary Consumers'
 };
 
 export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, pyramidType = 'energy' }) {
@@ -36,148 +36,122 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
     setDragOver(null);
   };
 
-  const handleDrop = (e, level) => {
+  const handleDrop = async (e, level) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOver(null);
-    
+
     try {
       const speciesData = JSON.parse(e.dataTransfer.getData('species'));
-      
       if (speciesData.trophicLevel === level) {
-        onAddSpecies(speciesData);
-      } else {
-        alert(`❌ Cannot add ${speciesData.name} to ${TROPHIC_LABELS[level]}!\n\n${speciesData.name} is a ${TROPHIC_LABELS[speciesData.trophicLevel]}.`);
+        await onAddSpecies(speciesData);
       }
     } catch (error) {
-      console.error('Drop error:', error);
+      console.error('Error dropping species:', error);
     }
   };
 
-  const calculateValue = (speciesItem) => {
-    switch(pyramidType) {
-      case 'energy':
-        return speciesItem.energy || 0;
-      case 'biomass':
-        return speciesItem.biomass || 0;
-      case 'numbers':
-        return speciesItem.population || 100;
-      default:
-        return speciesItem.energy || 0;
-    }
+  const calculateTotal = (levelSpecies) => {
+    return levelSpecies.reduce((sum, s) => {
+      if (pyramidType === 'energy') return sum + (s.energy || 0);
+      if (pyramidType === 'biomass') return sum + (s.biomass || 0);
+      if (pyramidType === 'numbers') return sum + (s.population || 0);
+      return sum;
+    }, 0);
   };
 
-  const getTotalForLevel = (level) => {
-    return groupedSpecies[level].reduce((sum, s) => sum + calculateValue(s), 0);
+  const getDisplayValue = (s) => {
+    if (pyramidType === 'energy') return `${(s.energy || 0).toFixed(1)} kcal/m²`;
+    if (pyramidType === 'biomass') return `${(s.biomass || 0).toFixed(1)} kg/m²`;
+    if (pyramidType === 'numbers') return `${(s.population || 0)} individuals`;
+    return '';
   };
 
-  //Calculate proper pyramid widths
-  const calculatePyramidWidth = () => {
-  const levels = ['producer', 'primary_consumer', 'secondary_consumer', 'tertiary_consumer'];
-  const totals = levels.map(level => getTotalForLevel(level));
-  
-  // Get the BASE value (producers - should be largest)
-  const baseValue = totals[0] || 1; // First level = producers
-  
-  // Calculate widths based on ratio to base
-  const widths = {};
-  levels.forEach((level, index) => {
-    const value = totals[index];
-    if (value === 0) {
-      widths[level] = 0; // Empty level
-    } else {
-      // Width as percentage of base (producers = 100%)
-      const percentage = (value / baseValue) * 100;
-      // Ensure minimum 15% visibility, max 100%
-      widths[level] = Math.max(Math.min(percentage, 100), 15);
-    }
-  });
-  
-  return widths;
-};
-
-  const pyramidWidths = calculatePyramidWidth();
-
-  return (
-    <div className="pyramid-canvas">
-      <div className="pyramid-header">
-        <h3>🏔️ Ecological Pyramid</h3>
-        <div className="pyramid-type-indicator">
-          Type: <strong>{pyramidType.charAt(0).toUpperCase() + pyramidType.slice(1)}</strong>
+  if (species.length === 0) {
+    return (
+      <div className="pyramid-container">
+        <div className="pyramid-header">
+          <h2>🔺 Ecological Pyramid</h2>
+          <span className="pyramid-type-label">Type: {pyramidType}</span>
+        </div>
+        <div className="empty-state">
+          <div className="empty-state-icon">🌍</div>
+          <h3>Build Your Ecosystem</h3>
+          <p>Drag species from the sidebar to the correct trophic level</p>
+          <div className="hint-bubble">💡 Start with producers at the base!</div>
         </div>
       </div>
+    );
+  }
 
-      {species.length === 0 ? (
-        <div className="empty-pyramid">
-          <div className="empty-icon">🌍</div>
-          <h4>Build Your Ecosystem</h4>
-          <p>Drag species from the sidebar to the correct trophic level</p>
-          <p className="hint">💡 Start with producers at the base!</p>
-        </div>
-      ) : (
-        <div className="pyramid-levels">
-          {Object.entries(groupedSpecies).map(([level, levelSpecies]) => {
-            const totalValue = getTotalForLevel(level);
-            const widthPercent = pyramidWidths[level];
-            
-            return (
-              <div
-                key={level}
-                className={`pyramid-level ${dragOver === level ? 'drag-over' : ''} ${levelSpecies.length === 0 ? 'empty-level' : ''}`}
-                style={{
-                  width: '100%',
-                  backgroundColor: TROPHIC_COLORS[level],
-                  minHeight: levelSpecies.length > 0 ? 'auto' : '60px'
-                }}
-                onDragOver={(e) => handleDragOver(e, level)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, level)}
-              >
-                <div className="level-header">
-                  <strong>{TROPHIC_LABELS[level]}</strong>
-                  <span className="level-count">{levelSpecies.length} species</span>
-                </div>
-                
-                {levelSpecies.length > 0 ? (
-                  <>
-                    <div className="level-species">
-                      {levelSpecies.map((s) => (
-                        <div className="species-chip">
-                          <span>{s.icon || '🔹'} {s.name}</span>
-                          <span className="species-value">
-                            {calculateValue(s).toFixed(1)}
-                            {pyramidType === 'numbers' ? '' : pyramidType === 'biomass' ? ' kg/m²' : ' kcal/m²'}
-                          </span>
-                          <button
-                            className="remove-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onRemoveSpecies(s);
-                            }}
-                            title="Remove species"
-                          >
-                            ×
-                          </button>
-                        </div>
+  const levels = ['tertiary_consumer', 'secondary_consumer', 'primary_consumer', 'producer'];
 
-                      ))}
-                    </div>
-                    
-                    <div className="level-total">
-                      Total: {totalValue.toFixed(1)} 
-                      {pyramidType === 'numbers' ? ' organisms' : pyramidType === 'biomass' ? ' kg/m²' : ' kcal/m²'}
-                    </div>
-                  </>
-                ) : (
-                  <div className="drop-hint">
-                    ⬇ Drop {TROPHIC_LABELS[level].toLowerCase()} here
-                  </div>
-                )}
+  return (
+    <div className="pyramid-container">
+      <div className="pyramid-header">
+        <h2>🔺 Ecological Pyramid</h2>
+        <span className="pyramid-type-label">Type: {pyramidType}</span>
+      </div>
+
+      <div className="pyramid-levels">
+        {levels.map(level => {
+          const levelSpecies = groupedSpecies[level];
+          const total = calculateTotal(levelSpecies);
+          const hasSpecies = levelSpecies.length > 0;
+
+          return (
+            <div
+              key={level}
+              className={`pyramid-level-card ${dragOver === level ? 'drag-over' : ''} ${!hasSpecies ? 'empty-level' : ''}`}
+              onDragOver={(e) => handleDragOver(e, level)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, level)}
+            >
+              <div className="level-header-row">
+                <h3 className="level-title-text" style={{ color: TROPHIC_COLORS[level] }}>
+                  {TROPHIC_LABELS[level]}
+                </h3>
+                <span className="level-count-badge">{levelSpecies.length} species</span>
               </div>
-            );
-          })}
-        </div>
-      )}
+
+              {hasSpecies ? (
+                <>
+                  <div className="species-chips-grid">
+                    {levelSpecies.map(s => (
+                      <div key={s._id || s.name} className="species-chip-card">
+                        <span className="species-chip-icon">{s.icon}</span>
+                        <div className="species-chip-info">
+                          <strong>{s.name}</strong>
+                          <small>{getDisplayValue(s)}</small>
+                        </div>
+                        <button
+                          className="remove-species-x"
+                          onClick={() => onRemoveSpecies(s)}
+                          title="Remove species"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="level-total-row">
+                    <span>Total {pyramidType}:</span>
+                    <strong>
+                      {pyramidType === 'energy' && `${total.toFixed(1)} kcal/m²`}
+                      {pyramidType === 'biomass' && `${total.toFixed(1)} kg/m²`}
+                      {pyramidType === 'numbers' && `${total} individuals`}
+                    </strong>
+                  </div>
+                </>
+              ) : (
+                <div className="empty-drop-hint">
+                  Drop {TROPHIC_LABELS[level].toLowerCase()} here
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

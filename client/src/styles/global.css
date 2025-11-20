@@ -1,6 +1,5 @@
 /* ============================================
-   MODERN ECOLOGICAL PYRAMID BUILDER
-   Infinite Craft-Inspired Design System
+   INFINITE CRAFT INSPIRED - CLEAN DESIGN
    ============================================ */
 
 * {
@@ -10,43 +9,24 @@
 }
 
 :root {
-  /* Color Palette */
-  --color-bg-primary: #f0f2f5;
-  --color-bg-secondary: #ffffff;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #6b7280;
-  --color-accent-green: #2c5f2d;
-  --color-accent-green-hover: #235024;
-  --color-accent-teal: #0d9488;
-  --color-border: #e5e7eb;
-  --color-shadow: rgba(0, 0, 0, 0.08);
-  
-  /* Spacing */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 0.75rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s ease;
+  --bg-canvas: #f5f7fa;
+  --bg-white: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --accent-green: #2c5f2d;
+  --accent-teal: #0d9488;
+  --border-light: #e5e7eb;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --transition: 0.2s ease;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
   line-height: 1.6;
 }
 
@@ -60,10 +40,10 @@ body {
    NAVBAR
    ============================================ */
 .navbar {
-  background: var(--color-accent-green);
+  background: var(--accent-green);
   color: white;
   padding: 0.875rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -82,9 +62,6 @@ body {
   font-weight: 600;
   color: white;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .nav-links {
@@ -96,7 +73,7 @@ body {
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: 500;
-  transition: color var(--transition-fast);
+  transition: color var(--transition);
 }
 
 .nav-link:hover {
@@ -104,85 +81,21 @@ body {
 }
 
 /* ============================================
-   HOME PAGE
-   ============================================ */
-.main-content {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-}
-
-.hero {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--color-accent-green);
-}
-
-.hero p {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-.cta-button {
-  display: inline-block;
-  background: var(--color-accent-green);
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: bold;
-  transition: transform 0.2s;
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
-  background: var(--color-accent-green-hover);
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 4rem;
-}
-
-.feature-card {
-  background: white;
-  padding: 2rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-}
-
-.feature-card h3 {
-  margin-bottom: 1rem;
-  color: var(--color-accent-green);
-}
-
-/* ============================================
-   BUILDER CONTAINER (Main Page)
+   BUILDER LAYOUT
    ============================================ */
 .builder-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 100%;
   width: 100%;
-  padding: 0;
-  gap: 0;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Top Control Bar */
+/* Top Bar */
 .builder-topbar {
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-light);
   padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -191,21 +104,15 @@ body {
   flex-shrink: 0;
 }
 
-.topbar-left {
-  flex: 1;
-}
-
 .builder-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-text-primary);
   margin: 0;
 }
 
 .topbar-controls {
   display: flex;
   gap: 0.75rem;
-  align-items: center;
 }
 
 .biome-select-compact,
@@ -215,18 +122,14 @@ body {
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-light);
   background: white;
   cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.biome-select-compact {
-  min-width: 180px;
+  transition: all var(--transition);
 }
 
 .biome-select-compact:hover {
-  border-color: var(--color-accent-teal);
+  border-color: var(--accent-teal);
 }
 
 .clear-btn-compact {
@@ -240,9 +143,9 @@ body {
 }
 
 .predict-btn-compact {
-  background: var(--color-accent-teal);
+  background: var(--accent-teal);
   color: white;
-  border-color: var(--color-accent-teal);
+  border: none;
 }
 
 .predict-btn-compact:hover:not(:disabled) {
@@ -254,10 +157,10 @@ body {
   cursor: not-allowed;
 }
 
-/* Pyramid Type Selector Bar */
+/* Pyramid Type Bar */
 .pyramid-type-bar {
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-light);
   padding: 0.75rem 1.5rem;
   display: flex;
   gap: 0.5rem;
@@ -266,25 +169,24 @@ body {
 
 .pyramid-type-btn {
   padding: 0.5rem 1.25rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-light);
   background: white;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 500;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition);
 }
 
 .pyramid-type-btn:hover {
-  border-color: var(--color-accent-teal);
-  color: var(--color-accent-teal);
+  border-color: var(--accent-teal);
 }
 
 .pyramid-type-btn.active {
-  background: var(--color-accent-green);
+  background: var(--accent-green);
   color: white;
-  border-color: var(--color-accent-green);
+  border-color: var(--accent-green);
 }
 
 /* Status Banner */
@@ -293,15 +195,10 @@ body {
   color: #1e40af;
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
   text-align: center;
-  border-bottom: 1px solid #93c5fd;
-  flex-shrink: 0;
 }
 
-/* ============================================
-   MAIN LAYOUT (Canvas + Sidebar)
-   ============================================ */
+/* Main Layout */
 .builder-main-layout {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -309,20 +206,16 @@ body {
   overflow: hidden;
 }
 
-/* LEFT: Canvas Area */
 .canvas-area {
-  background: var(--color-bg-primary);
+  background: var(--bg-canvas);
   overflow-y: auto;
   padding: 1.5rem;
 }
 
-/* RIGHT: Sidebar Area */
 .sidebar-area {
-  background: var(--color-bg-secondary);
-  border-left: 1px solid var(--color-border);
+  background: var(--bg-white);
+  border-left: 1px solid var(--border-light);
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 /* ============================================
@@ -330,23 +223,18 @@ body {
    ============================================ */
 .species-sidebar {
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  height: 100%;
 }
 
 .species-sidebar h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .sidebar-subtitle {
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  margin: -0.5rem 0 0 0;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
 }
 
 .ecological-note {
@@ -355,19 +243,17 @@ body {
   padding: 0.75rem;
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
-  line-height: 1.5;
-  margin: 0;
-  border-left: 3px solid #0ea5e9;
+  margin-bottom: 1.5rem;
 }
 
 .species-group {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .group-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -381,18 +267,18 @@ body {
 
 .species-card {
   background: white;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
   padding: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   cursor: grab;
-  transition: all var(--transition-fast);
+  transition: all var(--transition);
 }
 
 .species-card:hover {
-  border-color: var(--color-accent-teal);
+  border-color: var(--accent-teal);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
@@ -403,25 +289,23 @@ body {
 
 .species-icon {
   font-size: 1.75rem;
-  flex-shrink: 0;
 }
 
 .species-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
 }
 
 .species-info strong {
+  display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
 }
 
 .species-info small {
+  display: block;
   font-size: 0.75rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .energy-val {
@@ -430,13 +314,13 @@ body {
 }
 
 /* ============================================
-   PYRAMID CANVAS
+   PYRAMID CANVAS (INFINITE CRAFT STYLE)
    ============================================ */
 .pyramid-container {
-  background: white;
-  border-radius: var(--radius-lg);
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
   padding: 2rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   min-height: 500px;
 }
 
@@ -444,23 +328,25 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .pyramid-header h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text-primary);
 }
 
 .pyramid-type-label {
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  background: var(--color-bg-primary);
+  color: var(--text-secondary);
+  background: var(--bg-canvas);
   padding: 0.375rem 0.75rem;
   border-radius: var(--radius-sm);
 }
 
+/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -478,12 +364,11 @@ body {
 .empty-state h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text-primary);
 }
 
 .empty-state p {
   font-size: 0.9375rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   max-width: 400px;
 }
 
@@ -496,104 +381,155 @@ body {
   font-weight: 500;
 }
 
-/* Pyramid Levels */
+/* Pyramid Levels (WHITE CARDS, NOT COLORED BLOCKS) */
 .pyramid-levels {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.pyramid-level {
-  background: var(--color-bg-primary);
-  border: 2px dashed var(--color-border);
+.pyramid-level-card {
+  background: var(--bg-white);
+  border: 2px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 1rem;
-  min-height: 80px;
-  transition: all var(--transition-fast);
-  width: 100%;
+  padding: 1.5rem;
+  transition: all var(--transition);
 }
 
-.pyramid-level.drag-over {
-  border-color: var(--color-accent-teal);
+.pyramid-level-card.drag-over {
+  border-color: var(--accent-teal);
   background: #f0fdfa;
 }
 
-.level-header {
+.pyramid-level-card.empty-level {
+  border-style: dashed;
+  background: #fafafa;
+}
+
+.level-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.level-title {
-  font-size: 0.875rem;
+.level-title-text {
+  font-size: 1rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin: 0;
 }
 
-.level-count {
+.level-count-badge {
   font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  background: white;
-  padding: 0.25rem 0.5rem;
+  color: var(--text-secondary);
+  background: var(--bg-canvas);
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-sm);
 }
 
-.species-list {
+/* Species Chips Grid (WHITE CARDS) */
+.species-chips-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.species-chip {
-  background: white;
-  border: 1px solid var(--color-border);
+.species-chip-card {
+  background: #fafafa;
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 0.75rem;
+  transition: all var(--transition);
 }
 
-.remove-species-btn {
+.species-chip-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.species-chip-icon {
+  font-size: 1.5rem;
+}
+
+.species-chip-info {
+  flex: 1;
+}
+
+.species-chip-info strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.species-chip-info small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.remove-species-x {
   background: #fee2e2;
   color: #dc2626;
   border: none;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.75rem;
-  transition: all var(--transition-fast);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: all var(--transition);
 }
 
-.remove-species-btn:hover {
+.remove-species-x:hover {
   background: #fecaca;
 }
 
+.level-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.875rem;
+}
+
+.level-total-row strong {
+  font-weight: 600;
+  color: var(--accent-teal);
+}
+
+.empty-drop-hint {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 /* ============================================
-   PREDICTION RESULTS PANEL
+   PREDICTION PANEL
    ============================================ */
 .prediction-results {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
   background: white;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
   max-width: 450px;
   z-index: 50;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-light);
 }
 
 .prediction-header {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -609,19 +545,8 @@ body {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   cursor: pointer;
-  line-height: 1;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-prediction:hover {
-  color: var(--color-text-primary);
 }
 
 .prediction-body {
@@ -645,23 +570,14 @@ body {
 
 .meta-label {
   font-size: 0.75rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   font-weight: 600;
 }
 
 .meta-value {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.prediction-data h4 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  color: var(--color-text-primary);
 }
 
 .biomass-grid {
@@ -671,24 +587,22 @@ body {
 }
 
 .biomass-item {
-  background: var(--color-bg-primary);
+  background: var(--bg-canvas);
   padding: 0.75rem;
   border-radius: var(--radius-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
 }
 
 .biomass-index {
   font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  font-weight: 500;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 .biomass-value {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--color-accent-teal);
+  color: var(--accent-teal);
 }
 
 /* ============================================
@@ -701,29 +615,7 @@ body {
 
   .sidebar-area {
     border-left: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-light);
     max-height: 400px;
-  }
-
-  .prediction-results {
-    left: 1rem;
-    right: 1rem;
-    max-width: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .builder-topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .topbar-controls {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .pyramid-type-bar {
-    flex-wrap: wrap;
   }
 }
