@@ -92,10 +92,24 @@ export default function Builder() {
 
     setLoading(true);
     setError('');
+    setPrediction(null);
 
     try {
       const result = await predictBiomass(species);
-      setPrediction(result);
+      
+      // Enhance prediction with species mapping
+      const enhancedPrediction = {
+        ...result,
+        species: species.map((s, idx) => ({
+          ...s,
+          originalBiomass: s.biomass,
+          predictedBiomass: result.predicted_biomass[idx],
+          difference: result.predicted_biomass[idx] - s.biomass,
+          percentChange: ((result.predicted_biomass[idx] - s.biomass) / s.biomass * 100).toFixed(1)
+        }))
+      };
+
+      setPrediction(enhancedPrediction);
     } catch (error) {
       console.error('Error predicting:', error);
       setError('Prediction failed. Please try again.');
@@ -109,6 +123,7 @@ export default function Builder() {
     for (const s of species) {
       await handleRemoveSpecies(s);
     }
+    setPrediction(null);
   };
 
   return (
@@ -142,7 +157,7 @@ export default function Builder() {
             onClick={handlePredict}
             disabled={loading || species.length === 0}
           >
-            {loading ? '🔮 Predicting...' : '🤖 Predict'}
+            {loading ? '🔮 Analyzing...' : '🤖 Predict Biomass'}
           </button>
         </div>
       </div>
@@ -190,33 +205,79 @@ export default function Builder() {
         </div>
       </div>
 
-      {/* Prediction Results Panel */}
+      {/* Beautiful Prediction Results Panel */}
       {prediction && (
-        <div className="prediction-results">
-          <div className="prediction-header">
-            <h3>🔮 AI Prediction Results</h3>
-            <button className="close-prediction" onClick={() => setPrediction(null)}>×</button>
-          </div>
-          <div className="prediction-body">
-            <div className="prediction-meta">
-              <div className="meta-item">
-                <span className="meta-label">Model</span>
-                <span className="meta-value">{prediction.model}</span>
-              </div>
-              <div className="meta-item">
-                <span className="meta-label">Confidence</span>
-                <span className="meta-value">{Math.round(prediction.confidence * 100)}%</span>
-              </div>
+        <div className="prediction-overlay" onClick={() => setPrediction(null)}>
+          <div className="prediction-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="prediction-modal-header">
+              <h2>🤖 AI Biomass Prediction Results</h2>
+              <button className="close-modal-btn" onClick={() => setPrediction(null)}>×</button>
             </div>
-            <div className="prediction-data">
-              <h4>Predicted Biomass Values:</h4>
-              <div className="biomass-grid">
-                {prediction.predicted_biomass.map((val, idx) => (
-                  <div key={idx} className="biomass-item">
-                    <span className="biomass-index">Species {idx + 1}</span>
-                    <span className="biomass-value">{val.toFixed(2)} kg/m²</span>
+
+            <div className="prediction-modal-body">
+              {/* Model Metadata */}
+              <div className="prediction-meta-section">
+                <div className="meta-card">
+                  <span className="meta-label">Model</span>
+                  <span className="meta-value">{prediction.model}</span>
+                </div>
+                <div className="meta-card">
+                  <span className="meta-label">Confidence</span>
+                  <div className="confidence-bar-container">
+                    <div 
+                      className="confidence-bar-fill" 
+                      style={{ width: `${prediction.confidence * 100}%` }}
+                    ></div>
+                  </div>
+                  <span className="confidence-value">{(prediction.confidence * 100).toFixed(1)}%</span>
+                </div>
+                <div className="meta-card">
+                  <span className="meta-label">Species Analyzed</span>
+                  <span className="meta-value">{prediction.species.length}</span>
+                </div>
+              </div>
+
+              {/* Species Breakdown */}
+              <div className="species-predictions">
+                <h3>Species-by-Species Analysis</h3>
+                {prediction.species.map((s, idx) => (
+                  <div key={idx} className="species-prediction-card">
+                    <div className="species-prediction-header">
+                      <span className="species-icon-large">{s.icon}</span>
+                      <div className="species-prediction-info">
+                        <h4>{s.name}</h4>
+                        <span className="trophic-badge">{s.trophicLevel.replace('_', ' ')}</span>
+                      </div>
+                    </div>
+
+                    <div className="prediction-comparison">
+                      <div className="comparison-item">
+                        <span className="comparison-label">Original Biomass</span>
+                        <span className="comparison-value original">{s.originalBiomass.toFixed(2)} kg/m²</span>
+                      </div>
+                      <div className="comparison-arrow">→</div>
+                      <div className="comparison-item">
+                        <span className="comparison-label">Predicted Biomass</span>
+                        <span className="comparison-value predicted">{s.predictedBiomass.toFixed(2)} kg/m²</span>
+                      </div>
+                    </div>
+
+                    <div className="prediction-change">
+                      <span className={`change-badge ${s.difference >= 0 ? 'positive' : 'negative'}`}>
+                        {s.difference >= 0 ? '↑' : '↓'} {Math.abs(s.difference).toFixed(2)} kg/m² 
+                        ({s.difference >= 0 ? '+' : ''}{s.percentChange}%)
+                      </span>
+                    </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Summary */}
+              <div className="prediction-summary">
+                <p>
+                  🎯 The model predicts biomass values based on trophic relationships and energy transfer efficiency. 
+                  Variations indicate ecosystem balance adjustments.
+                </p>
               </div>
             </div>
           </div>
