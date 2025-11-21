@@ -1,27 +1,23 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer'; 
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Builder from './pages/Builder';
-import { ThemeProvider } from './hooks/useTheme.jsx';
 import './styles/global.css';
 
-function App() {
+export default function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="app">
-          <Navbar />
+    <Router>
+      <div className="app-shell">
+        <Navbar />
+        <main className="app-main">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/builder" element={<Builder />} />
           </Routes>
-          <Footer /> 
-        </div>
-      </Router>
-    </ThemeProvider>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
-
-export default App;

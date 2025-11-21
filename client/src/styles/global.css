@@ -1165,3 +1165,36 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* App layout for sticky footer */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background, #f6f7fa);
+  position: relative;
+}
+
+.app-main {
+  flex: 1 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-footer {
+  width: 100%;
+  background: #1c1c1c;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-top: 2px solid #24e073;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
