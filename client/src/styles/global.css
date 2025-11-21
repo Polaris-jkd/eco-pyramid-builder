@@ -1,7 +1,6 @@
 /* ============================================
    CLEAN DESIGN SYSTEM
    ============================================ */
-
 * {
   margin: 0;
   padding: 0;
@@ -37,21 +36,33 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
-body {
+html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-canvas);
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  width: 100%;
+  /* REMOVED overflow: hidden so the page can scroll naturally */
+  overflow-x: hidden; 
 }
 
-
-.app {
+/* The main wrapper for the app */
+.app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;  
+  /* FIXED: Now uses the theme variable so dark mode covers the whole screen */
+  background: var(--bg-canvas); 
+  position: relative;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ============================================
@@ -70,6 +81,7 @@ body {
 .nav-container {
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -129,11 +141,14 @@ body {
    ============================================ */
 .main-content {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
-  background: var(--bg-canvas);
+  /* Background is transparent here so app-shell color shows through */
+  background: transparent; 
   flex: 1;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero {
@@ -177,6 +192,7 @@ body {
   gap: 2rem;
   margin: 3rem 0;
   padding-bottom: 4rem;
+  width: 100%;
 }
 
 .feature-card {
@@ -213,11 +229,11 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
-  min-height: calc(100vh - 60px); /* Navbar height approximate */
+  /* FIXED: Height uses calculation to fit exactly between nav and footer */
+  height: calc(100vh - 70px - 60px); /* Adjust based on navbar/footer size */
+  min-height: 500px;
   overflow: hidden;
 }
-
 
 .builder-topbar {
   background: var(--bg-white);
@@ -327,13 +343,13 @@ body {
   display: grid;
   grid-template-columns: 1fr 360px;
   flex: 1;
-  overflow: hidden;
+  overflow: hidden; /* Prevents double scrollbars */
   height: 100%;
 }
 
 .canvas-area {
   background: var(--bg-canvas);
-  overflow-y: auto;
+  overflow-y: auto; /* Allows vertical scroll inside canvas */
   overflow-x: hidden;
   padding: 1.5rem;
   height: 100%;
@@ -342,7 +358,7 @@ body {
 .sidebar-area {
   background: var(--bg-white);
   border-left: 1px solid var(--border-light);
-  overflow-y: auto;
+  overflow-y: auto; /* Allows vertical scroll inside sidebar */
   overflow-x: hidden;
   height: 100%;
 }
@@ -645,96 +661,34 @@ body {
 }
 
 /* ============================================
-   PREDICTION PANEL
+   FOOTER (Fixed)
    ============================================ */
-.prediction-results {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  background: var(--bg-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  max-width: 450px;
-  z-index: 50;
-  border: 1px solid var(--border-light);
-}
-
-.prediction-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border-light);
+.app-footer {
+  width: 100%;
+  background: #1c1c1c;
+  color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 2rem;
   align-items: center;
-}
-
-.prediction-header h3 {
+  padding: 1rem 2rem;
   font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
+  font-weight: 500;
+  border-top: 2px solid #24e073;
+  margin-top: auto; /* Pushes footer to bottom */
+  flex-shrink: 0;
 }
 
-.close-prediction {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-secondary);
+.footer-item {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease;
   cursor: pointer;
 }
 
-.prediction-body {
-  padding: 1.5rem;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.prediction-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.meta-label {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.meta-value {
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.biomass-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-}
-
-.biomass-item {
-  background: var(--bg-canvas);
-  padding: 0.75rem;
-  border-radius: var(--radius-sm);
-}
-
-.biomass-index {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.biomass-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--accent-teal);
+.footer-item:hover {
+  color: #24e073;
+  text-decoration: underline;
 }
 
 /* ============================================
@@ -744,110 +698,60 @@ body {
   .builder-main-layout {
     grid-template-columns: 1fr;
   }
-
+  /* Allow sidebar to scroll nicely on mobile */
   .sidebar-area {
     border-left: none;
     border-top: 1px solid var(--border-light);
+    height: auto;
     max-height: 400px;
+  }
+  .builder-container {
+    height: auto; /* Allow full page scroll on mobile */
+    overflow: visible;
+  }
+  .canvas-area {
+    overflow: visible;
+    height: auto;
   }
 }
 
 @media (max-width: 768px) {
-  .nav-brand {
-    font-size: 1.1rem;
-  }
-
-  .nav-right {
-    gap: 1rem;
-  }
-
-  .nav-links {
-    gap: 1rem;
-  }
-
-  .nav-link {
-    font-size: 0.875rem;
-  }
-
-  .hero h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-  }
-
+  .nav-brand { font-size: 1.1rem; }
+  .nav-right { gap: 1rem; }
+  .nav-links { gap: 1rem; }
+  .nav-link { font-size: 0.875rem; }
+  
+  .hero h1 { font-size: 1.75rem; }
+  .hero p { font-size: 1rem; }
+  
+  .features { grid-template-columns: 1fr; }
+  
   .builder-topbar {
     flex-direction: column;
     align-items: stretch;
     padding: 1rem;
   }
-
+  
   .topbar-controls {
     flex-direction: column;
     width: 100%;
   }
-
+  
   .biome-select-compact,
   .clear-btn-compact,
   .predict-btn-compact {
     width: 100%;
   }
-
-  .pyramid-type-bar {
-    flex-wrap: wrap;
-  }
-
-  .pyramid-container {
-    padding: 1rem;
-  }
-
-  .species-chips-grid {
+  
+  .pyramid-type-bar { flex-wrap: wrap; }
+  .pyramid-container { padding: 1rem; }
+  .species-chips-grid { flex-direction: column; }
+  
+  .app-footer {
     flex-direction: column;
-  }
-
-  .prediction-results {
-    left: 1rem;
-    right: 1rem;
-    max-width: none;
-  }
-
-  .biomass-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 0.75rem 1rem;
-  }
-
-  .builder-title {
-    font-size: 1.25rem;
-  }
-
-  .pyramid-type-btn {
-    flex: 1;
-    font-size: 0.8125rem;
-  }
-}
-
-/* Force 3 feature cards in same row */
-.features {
-  grid-template-columns: repeat(3, 1fr) !important;
-  max-width: 1200px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* Responsive: Stack on smaller screens */
-@media (max-width: 900px) {
-  .features {
-    grid-template-columns: 1fr !important;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -889,14 +793,8 @@ body {
 }
 
 @keyframes slideUp {
-  from { 
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .prediction-modal-header {
@@ -931,7 +829,7 @@ body {
 }
 
 .close-modal-btn:hover {
-  background: var(--color-secondary);
+  background: var(--border-light);
   color: var(--text-primary);
 }
 
@@ -999,9 +897,7 @@ body {
 }
 
 /* Species Predictions */
-.species-predictions {
-  margin-top: 2rem;
-}
+.species-predictions { margin-top: 2rem; }
 
 .species-predictions h3 {
   font-size: 1.125rem;
@@ -1031,9 +927,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.species-icon-large {
-  font-size: 2.5rem;
-}
+.species-icon-large { font-size: 2.5rem; }
 
 .species-prediction-info h4 {
   font-size: 1.125rem;
@@ -1083,23 +977,12 @@ body {
   font-weight: 600;
 }
 
-.comparison-value.original {
-  color: #6b7280;
-}
-
-.comparison-value.predicted {
-  color: var(--accent-teal);
-}
-
-.comparison-arrow {
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-}
+.comparison-value.original { color: #6b7280; }
+.comparison-value.predicted { color: var(--accent-teal); }
+.comparison-arrow { font-size: 1.5rem; color: var(--text-secondary); }
 
 /* Change Badge */
-.prediction-change {
-  text-align: center;
-}
+.prediction-change { text-align: center; }
 
 .change-badge {
   display: inline-block;
@@ -1143,82 +1026,4 @@ body {
   border-color: rgba(59, 130, 246, 0.3);
 }
 
-[data-theme="dark"] .prediction-summary p {
-  color: #93c5fd;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .prediction-modal {
-    width: 95%;
-    max-height: 95vh;
-  }
-
-  .prediction-modal-body {
-    padding: 1rem;
-  }
-
-  .prediction-comparison {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .comparison-arrow {
-    transform: rotate(90deg);
-  }
-
-  .prediction-meta-section {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* App layout for sticky footer */
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--background, #f6f7fa);
-  position: relative;
-  overflow: hidden;
-}
-
-.app-main {
-  flex: 1 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-footer {
-  width: 100%;
-  background: #1c1c1c;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  align-items: center;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-top: 2px solid #24e073;
-  margin-top: auto;
-  flex-shrink: 0;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* This stops the whole page from scrolling */
-}
-
-#root {
-  height: 100%; /* Ensures your React app fills the screen */
-  width: 100%;
-}
-
-.scrollable-content {
-  flex: 1; /* Takes remaining height */
-  overflow-y: auto; /* Adds scrollbar to this area only */
-}
+[data-theme="dark"] .prediction-summary p { color: #93c5fd; }
