@@ -213,6 +213,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100vh;
   min-height: calc(100vh - 60px); /* Navbar height approximate */
   overflow: hidden;
 }
@@ -1204,3 +1205,20 @@ body {
   flex-shrink: 0;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* This stops the whole page from scrolling */
+}
+
+#root {
+  height: 100%; /* Ensures your React app fills the screen */
+  width: 100%;
+}
+
+.scrollable-content {
+  flex: 1; /* Takes remaining height */
+  overflow-y: auto; /* Adds scrollbar to this area only */
+}
