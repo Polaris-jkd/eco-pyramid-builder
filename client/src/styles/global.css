@@ -131,6 +131,9 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  background: var(--bg-canvas);
+  flex: 1;
+  overflow: hidden;
 }
 
 .hero {
@@ -1175,6 +1178,7 @@ body {
   flex-direction: column;
   background: var(--background, #f6f7fa);
   position: relative;
+  overflow: hidden;
 }
 
 .app-main {
