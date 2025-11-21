@@ -140,7 +140,9 @@ export default function SpeciesSidebar({ onAddSpecies }) {
       <h3>🧬 Species Library</h3>
       <p className="sidebar-subtitle">Click or drag to add species</p>
       <p className="ecological-note">💡 Notice the 10% rule: Each level has ~10% of the biomass below it</p>
-      
+        
+      <div className="species-list-container">
+
       {Object.entries(groupedSpecies).map(([level, speciesList]) => (
         <div key={level} className="species-group">
           <h4 className="group-title">
@@ -176,6 +178,7 @@ export default function SpeciesSidebar({ onAddSpecies }) {
           </div>
         </div>
       ))}
+      </div> 
     </div>
   );
 }

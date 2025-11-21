@@ -376,6 +376,10 @@ html, body {
   margin-bottom: 0.5rem;
 }
 
+.species-list-container{
+  overflow-y: auto;
+}
+
 .sidebar-subtitle {
   font-size: 0.875rem;
   color: var(--text-secondary);
