@@ -97,7 +97,6 @@ export default function Builder() {
     try {
       const result = await predictBiomass(species);
       
-      // Enhance prediction with species mapping
       const enhancedPrediction = {
         ...result,
         species: species.map((s, idx) => ({
@@ -132,8 +131,7 @@ export default function Builder() {
       display: 'flex',
       flexDirection: 'column',
       minHeight: 0,
-      overflow: 'hidden',
-      position: 'relative'
+      overflow: 'hidden'
     }}>
       {/* Top Controls Bar */}
       <div className="builder-topbar">
@@ -194,19 +192,23 @@ export default function Builder() {
       {/* Error/Status Banner */}
       {error && <div className="status-banner">{error}</div>}
 
-      {/* Main Layout: Canvas + Sidebar - ✅ CRITICAL FIX */}
+      {/* ✅ CRITICAL FIX: Main Layout with Inline Styles */}
       <div className="builder-main-layout" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 360px',
         flex: 1,
         minHeight: 0,
-        overflow: 'hidden'
+        maxHeight: '100%',
+        overflow: 'hidden',
+        position: 'relative'
       }}>
-        {/* LEFT: Pyramid Canvas */}
+        {/* LEFT: Pyramid Canvas - ✅ WRAPPED WITH HEIGHT CONSTRAINT */}
         <div className="canvas-area" style={{
           overflowY: 'auto',
           overflowX: 'hidden',
-          height: '100%'
+          height: '100%',
+          maxHeight: '100%',
+          position: 'relative'
         }}>
           <PyramidCanvas
             species={species}
@@ -216,11 +218,12 @@ export default function Builder() {
           />
         </div>
 
-        {/* RIGHT: Species Sidebar */}
+        {/* RIGHT: Species Sidebar - ✅ ALREADY HAS INLINE STYLES */}
         <div className="sidebar-area" style={{
           overflowY: 'auto',
           overflowX: 'hidden',
           height: '100%',
+          maxHeight: '100%',
           display: 'flex',
           flexDirection: 'column'
         }}>
@@ -238,7 +241,6 @@ export default function Builder() {
             </div>
 
             <div className="prediction-modal-body">
-              {/* Model Metadata */}
               <div className="prediction-meta-section">
                 <div className="meta-card">
                   <span className="meta-label">Model</span>
@@ -260,7 +262,6 @@ export default function Builder() {
                 </div>
               </div>
 
-              {/* Species Breakdown */}
               <div className="species-predictions">
                 <h3>Species-by-Species Analysis</h3>
                 {prediction.species.map((s, idx) => (
@@ -295,7 +296,6 @@ export default function Builder() {
                 ))}
               </div>
 
-              {/* Summary */}
               <div className="prediction-summary">
                 <p>
                   🎯 The model predicts biomass values based on trophic relationships and energy transfer efficiency. 
