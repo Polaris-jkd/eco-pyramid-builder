@@ -160,7 +160,7 @@ export default function Builder() {
       <div className="builder-unified-toolbar" style={{
         background: 'var(--bg-white)',
         borderBottom: '1px solid var(--border-light)',
-        padding: '0.75rem 1.5rem',
+        padding: '1.25rem 2rem',
         display: 'flex',
         alignItems: 'center',
         gap: '1.5rem',
