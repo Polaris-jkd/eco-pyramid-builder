@@ -16,12 +16,18 @@ const TROPHIC_LABELS = {
 
 export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, pyramidType = 'energy' }) {
   const [dragOver, setDragOver] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const groupedSpecies = {
     tertiary_consumer: species.filter(s => s.trophicLevel === 'tertiary_consumer'),
     secondary_consumer: species.filter(s => s.trophicLevel === 'secondary_consumer'),
     primary_consumer: species.filter(s => s.trophicLevel === 'primary_consumer'),
     producer: species.filter(s => s.trophicLevel === 'producer')
+  };
+
+  const showError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(''), 3000);
   };
 
   const handleDragOver = (e, level) => {
@@ -43,11 +49,42 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
 
     try {
       const speciesData = JSON.parse(e.dataTransfer.getData('species'));
-      if (speciesData.trophicLevel === level) {
-        await onAddSpecies(speciesData);
+      
+      // ✅ CHECK: Wrong trophic level
+      if (speciesData.trophicLevel !== level) {
+        const correctLevel = TROPHIC_LABELS[speciesData.trophicLevel];
+        const droppedLevel = TROPHIC_LABELS[level];
+        showError(`❌ ${speciesData.name} belongs to ${correctLevel}, not ${droppedLevel}!`);
+        return;
       }
+
+      // ✅ CHECK: Duplicate species
+      const exists = species.some(s => s.name === speciesData.name);
+      if (exists) {
+        showError(`⚠️ ${speciesData.name} is already in the pyramid!`);
+        return;
+      }
+
+      await onAddSpecies(speciesData);
     } catch (error) {
       console.error('Error dropping species:', error);
+      showError('Failed to add species. Please try again.');
+    }
+  };
+
+  // ✅ FIX: Handle drop on EMPTY canvas (entire pyramid area)
+  const handleCanvasDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      const speciesData = JSON.parse(e.dataTransfer.getData('species'));
+      
+      // Automatically add to correct level
+      const correctLevel = speciesData.trophicLevel;
+      await handleDrop(e, correctLevel);
+    } catch (error) {
+      console.error('Error dropping on canvas:', error);
     }
   };
 
@@ -69,15 +106,35 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
 
   if (species.length === 0) {
     return (
-      <div className="pyramid-container">
+      <div 
+        className="pyramid-container"
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleCanvasDrop}
+      >
         <div className="pyramid-header">
           <h2>🔺 Ecological Pyramid</h2>
           <span className="pyramid-type-label">Type: {pyramidType}</span>
         </div>
+        
+        {/* ✅ Error Message Banner */}
+        {errorMessage && (
+          <div style={{
+            background: '#fee2e2',
+            color: '#dc2626',
+            padding: '0.75rem 1rem',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+            fontSize: '0.875rem',
+            fontWeight: 500
+          }}>
+            {errorMessage}
+          </div>
+        )}
+
         <div className="empty-state">
           <div className="empty-state-icon">🌍</div>
           <h3>Build Your Ecosystem</h3>
-          <p>Drag species from the sidebar to the correct trophic level</p>
+          <p>Drag species from the sidebar or click to add</p>
           <div className="hint-bubble">💡 Start with producers at the base!</div>
         </div>
       </div>
@@ -92,6 +149,22 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
         <h2>🔺 Ecological Pyramid</h2>
         <span className="pyramid-type-label">Type: {pyramidType}</span>
       </div>
+
+      {/* ✅ Error Message Banner */}
+      {errorMessage && (
+        <div style={{
+          background: '#fee2e2',
+          color: '#dc2626',
+          padding: '0.75rem 1rem',
+          borderRadius: '8px',
+          marginBottom: '1rem',
+          fontSize: '0.875rem',
+          fontWeight: 500,
+          animation: 'slideIn 0.3s ease'
+        }}>
+          {errorMessage}
+        </div>
+      )}
 
       <div className="pyramid-levels">
         {levels.map(level => {

@@ -87,16 +87,38 @@ export default function Builder() {
     const biome = BIOME_TEMPLATES[biomeKey];
     setError(`Loading ${biome.name}...`);
 
-    for (const s of species) {
-      await handleRemoveSpecies(s);
-    }
+    try {
+      // ✅ FAST: Delete all at once
+      await Promise.all(
+        species.map(s => s._id ? deleteSpecies(s._id) : Promise.resolve())
+      );
 
-    for (const speciesData of biome.species) {
-      await handleAddSpecies(speciesData);
-    }
+      // ✅ FAST: Add all at once
+      await Promise.all(
+        biome.species.map(speciesData => {
+          const newSpecies = {
+            name: speciesData.name,
+            trophicLevel: speciesData.trophicLevel,
+            biomass: parseFloat(speciesData.biomass),
+            energy: parseFloat(speciesData.energy),
+            population: parseFloat(speciesData.population) || 100,
+            ecosystem: speciesData.ecosystem || 'grassland',
+            icon: speciesData.icon || '🔹'
+          };
+          return addSpecies(newSpecies);
+        })
+      );
 
-    setError('');
+      // Reload once at the end
+      await loadSpecies();
+      setError('');
+    } catch (error) {
+      console.error('Error loading biome template:', error);
+      setError('Failed to load biome template');
+      setTimeout(() => setError(''), 3000);
+    }
   };
+
 
   const handlePredict = async () => {
     if (species.length === 0) {
