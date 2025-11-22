@@ -15,10 +15,9 @@ export default function Builder() {
   useEffect(() => {
     loadSpecies();
     
-    // Force height recalculation
     const forceResize = () => {
       if (containerRef.current) {
-        const navbarHeight = 60; // Approximate navbar height
+        const navbarHeight = 60;
         const availableHeight = window.innerHeight - navbarHeight;
         containerRef.current.style.height = `${availableHeight}px`;
         containerRef.current.style.maxHeight = `${availableHeight}px`;
@@ -157,13 +156,48 @@ export default function Builder() {
         background: 'var(--bg-canvas)'
       }}
     >
-      {/* Top Controls Bar */}
-      <div className="builder-topbar" style={{ flexShrink: 0 }}>
-        <div className="topbar-left">
-          <h1 className="builder-title">🌿 Pyramid Builder</h1>
+      {/* ✅ PROFESSIONAL UNIFIED TOOLBAR */}
+      <div className="builder-unified-toolbar" style={{
+        background: 'var(--bg-white)',
+        borderBottom: '1px solid var(--border-light)',
+        padding: '0.75rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem',
+        flexShrink: 0,
+        flexWrap: 'wrap'
+      }}>
+        {/* LEFT: Pyramid Type Selector */}
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            className={`pyramid-type-btn ${pyramidType === 'energy' ? 'active' : ''}`}
+            onClick={() => setPyramidType('energy')}
+          >
+            ⚡ Energy
+          </button>
+          <button
+            className={`pyramid-type-btn ${pyramidType === 'biomass' ? 'active' : ''}`}
+            onClick={() => setPyramidType('biomass')}
+          >
+            🏔️ Biomass
+          </button>
+          <button
+            className={`pyramid-type-btn ${pyramidType === 'numbers' ? 'active' : ''}`}
+            onClick={() => setPyramidType('numbers')}
+          >
+            🔢 Numbers
+          </button>
         </div>
-        
-        <div className="topbar-controls">
+
+        {/* DIVIDER */}
+        <div style={{
+          width: '1px',
+          height: '30px',
+          background: 'var(--border-light)'
+        }}></div>
+
+        {/* RIGHT: Controls */}
+        <div style={{ display: 'flex', gap: '0.75rem', marginLeft: 'auto', flexWrap: 'wrap' }}>
           <select 
             className="biome-select-compact" 
             onChange={(e) => loadBiomeTemplate(e.target.value)}
@@ -191,32 +225,10 @@ export default function Builder() {
         </div>
       </div>
 
-      {/* Pyramid Type Selector */}
-      <div className="pyramid-type-bar" style={{ flexShrink: 0 }}>
-        <button
-          className={`pyramid-type-btn ${pyramidType === 'energy' ? 'active' : ''}`}
-          onClick={() => setPyramidType('energy')}
-        >
-          ⚡ Energy
-        </button>
-        <button
-          className={`pyramid-type-btn ${pyramidType === 'biomass' ? 'active' : ''}`}
-          onClick={() => setPyramidType('biomass')}
-        >
-          🏔️ Biomass
-        </button>
-        <button
-          className={`pyramid-type-btn ${pyramidType === 'numbers' ? 'active' : ''}`}
-          onClick={() => setPyramidType('numbers')}
-        >
-          🔢 Numbers
-        </button>
-      </div>
-
       {/* Error/Status Banner */}
       {error && <div className="status-banner" style={{ flexShrink: 0 }}>{error}</div>}
 
-      {/* Main Layout - FIXED POSITION */}
+      {/* Main Layout */}
       <div 
         className="builder-main-layout" 
         style={{
