@@ -126,7 +126,6 @@ const SAMPLE_SPECIES = [
   { id: 'arctic-wolf', name: 'Arctic Wolf', trophicLevel: 'tertiary_consumer', biomass: 11, energy: 110, population: 400, icon: '🐺' },
 ];
 
-
 export default function SpeciesSidebar({ onAddSpecies }) {
   const groupedSpecies = {
     producer: SAMPLE_SPECIES.filter(s => s.trophicLevel === 'producer'),
@@ -136,49 +135,64 @@ export default function SpeciesSidebar({ onAddSpecies }) {
   };
 
   return (
-    <div className="species-sidebar">
+    <div className="species-sidebar" style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '100%',
+      minHeight: 0,
+      overflow: 'hidden'
+    }}>
       <h3>🧬 Species Library</h3>
       <p className="sidebar-subtitle">Click or drag to add species</p>
       <p className="ecological-note">💡 Notice the 10% rule: Each level has ~10% of the biomass below it</p>
         
-      <div className="species-list-container">
-
-      {Object.entries(groupedSpecies).map(([level, speciesList]) => (
-        <div key={level} className="species-group">
-          <h4 className="group-title">
-            {level === 'producer' && '🌱 Producers (Base)'}
-            {level === 'primary_consumer' && '🐰 Primary Consumers'}
-            {level === 'secondary_consumer' && '🐍 Secondary Consumers'}
-            {level === 'tertiary_consumer' && '🦅 Apex Predators'}
-          </h4>
-          
-          <div className="species-cards">
-            {speciesList.map(species => (
-              <div
-                key={species.id}
-                className="species-card draggable"
-                onClick={() => onAddSpecies(species)}
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.setData('species', JSON.stringify(species));
-                  e.currentTarget.style.opacity = '0.5';
-                }}
-                onDragEnd={(e) => {
-                  e.currentTarget.style.opacity = '1';
-                }}
-              >
-                <span className="species-icon">{species.icon}</span>
-                <div className="species-info">
-                  <strong>{species.name}</strong>
-                  <small>{species.biomass} kg/m²</small>
-                  <small className="energy-val">{species.energy} kcal/m²</small>
+      {/* ✅ CRITICAL FIX: Inline styles force scrolling */}
+      <div 
+        className="species-list-container"
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          paddingRight: '0.5rem'
+        }}
+      >
+        {Object.entries(groupedSpecies).map(([level, speciesList]) => (
+          <div key={level} className="species-group">
+            <h4 className="group-title">
+              {level === 'producer' && '🌱 Producers (Base)'}
+              {level === 'primary_consumer' && '🐰 Primary Consumers'}
+              {level === 'secondary_consumer' && '🐍 Secondary Consumers'}
+              {level === 'tertiary_consumer' && '🦅 Apex Predators'}
+            </h4>
+            
+            <div className="species-cards">
+              {speciesList.map(species => (
+                <div
+                  key={species.id}
+                  className="species-card draggable"
+                  onClick={() => onAddSpecies(species)}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData('species', JSON.stringify(species));
+                    e.currentTarget.style.opacity = '0.5';
+                  }}
+                  onDragEnd={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                  }}
+                >
+                  <span className="species-icon">{species.icon}</span>
+                  <div className="species-info">
+                    <strong>{species.name}</strong>
+                    <small>{species.biomass} kg/m²</small>
+                    <small className="energy-val">{species.energy} kcal/m²</small>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      </div> 
+        ))}
+      </div>
     </div>
   );
 }

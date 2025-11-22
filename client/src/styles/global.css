@@ -371,22 +371,20 @@ body {
 .sidebar-area {
   background: var(--bg-white);
   border-left: 1px solid var(--border-light);
-  overflow-y: auto; /* ✅ Enable scroll */
-  overflow-x: hidden;
-  height: 100%; /* ✅ Fill grid cell */
+  overflow-y: auto !important; /* Force scroll */
+  overflow-x: hidden !important;
+  height: 100% !important;
   display: flex;
   flex-direction: column;
 }
 
-/* ============================================
-   SPECIES SIDEBAR - SCROLLABLE LIST
-   ============================================ */
 .species-sidebar {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  height: 100%; /* ✅ Fill parent */
-  min-height: 0; /* ✅ Allow shrinking */
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }
 
 .species-sidebar h3 {
@@ -413,12 +411,11 @@ body {
   flex-shrink: 0;
 }
 
-/* ✅✅✅ THE CRITICAL FIX - SCROLLABLE SPECIES LIST */
 .species-list-container {
-  flex: 1; /* ✅ Take remaining space */
-  min-height: 0; /* ✅ Allow shrinking */
-  overflow-y: auto; /* ✅ Enable scroll */
-  overflow-x: hidden;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: scroll !important; /* Force scroll */
+  overflow-x: hidden !important;
   padding-right: 0.5rem;
 }
 
