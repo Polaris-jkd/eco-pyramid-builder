@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   /* Light Mode */
   --bg-canvas: #f5f7fa;
@@ -18,6 +22,7 @@
   --border-light: #e5e7eb;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
   --radius-sm: 8px;
   --radius-md: 12px;
   --transition: 0.2s ease;
@@ -34,9 +39,16 @@
   --border-light: #404040;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-html, body {
+html {
+  height: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: auto; /* Allow vertical scroll */
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-canvas);
   color: var(--text-primary);
@@ -44,26 +56,25 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  /* REMOVED overflow: hidden so the page can scroll naturally */
-  overflow-x: hidden; 
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* The main wrapper for the app */
+/* ============================================
+   APP SHELL - FIXED LAYOUT
+   ============================================ */
 .app-shell {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* FIXED: Now uses the theme variable so dark mode covers the whole screen */
-  background: var(--bg-canvas); 
-  position: relative;
+  background: var(--bg-canvas);
 }
 
 .app-main {
   flex: 1;
-  width: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 /* ============================================
@@ -77,6 +88,7 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-shrink: 0;
 }
 
 .nav-container {
@@ -138,15 +150,14 @@ html, body {
 }
 
 /* ============================================
-   HOME PAGE
+   HOME PAGE - FIXED FOOTER VISIBILITY
    ============================================ */
 .main-content {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
-  /* Background is transparent here so app-shell color shows through */
-  background: transparent; 
+  padding: 0 2rem 3rem 2rem; /* Added bottom padding */
+  background: transparent;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -192,7 +203,7 @@ html, body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin: 3rem 0;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem; /* Extra space before footer */
   width: 100%;
 }
 
@@ -223,18 +234,16 @@ html, body {
 }
 
 /* ============================================
-   BUILDER PAGE
+   BUILDER PAGE - FIXED SCROLLING
    ============================================ */
 .builder-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  /* FIXED: Height uses calculation to fit exactly between nav and footer */
-  /* height: calc(100vh - 70px - 60px); Adjust based on navbar/footer size */
+  height: calc(100vh - 60px); /* Account for navbar height */
   min-height: 500px;
-  overflow: hidden;
+  overflow: hidden; /* Prevent outer scroll */
 }
 
 .builder-topbar {
@@ -339,55 +348,62 @@ html, body {
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
   text-align: center;
-}
-
-.builder-main-layout {
-  display: grid;
-  min-height: 0;
-  grid-template-columns: 1fr 360px;
-  flex: 1;
-  overflow: hidden; /* Prevents double scrollbars */
-  height: 100%;
-}
-
-.canvas-area {
-  background: var(--bg-canvas);
-  overflow-y: auto; /* Allows vertical scroll inside canvas */
-  overflow-x: hidden;
-  padding: 1.5rem;
-  height: 100%;
-}
-
-.sidebar-area {
-  background: var(--bg-white);
-  border-left: 1px solid var(--border-light);
-  overflow: hidden;
-  overflow-y: auto; /* Allows vertical scroll inside sidebar */
-  overflow-x: hidden;
-  height: 100%;
+  flex-shrink: 0;
 }
 
 /* ============================================
-   SPECIES SIDEBAR
+   BUILDER MAIN LAYOUT - SCROLLABLE AREAS
+   ============================================ */
+.builder-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  flex: 1;
+  min-height: 0; /* CRITICAL: Allows flex children to shrink */
+  overflow: hidden;
+}
+
+/* CANVAS AREA - NOW SCROLLABLE */
+.canvas-area {
+  background: var(--bg-canvas);
+  overflow-y: auto; /* ✅ FIXED: Enable vertical scroll */
+  overflow-x: hidden;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+/* SIDEBAR AREA - NOW SCROLLABLE */
+.sidebar-area {
+  background: var(--bg-white);
+  border-left: 1px solid var(--border-light);
+  overflow-y: auto; /* ✅ FIXED: Enable vertical scroll */
+  overflow-x: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   SPECIES SIDEBAR - SCROLLABLE LIST
    ============================================ */
 .species-sidebar {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .species-sidebar h3 {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-}
-
-.species-list-container{
-  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .sidebar-subtitle {
   font-size: 0.875rem;
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .ecological-note {
@@ -397,6 +413,43 @@ html, body {
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
   margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* ✅ FIXED: Scrollable species list container */
+.species-list-container {
+  flex: 1;
+  overflow-y: auto; /* Enable scroll */
+  overflow-x: hidden;
+  padding-right: 0.5rem; /* Space for scrollbar */
+}
+
+/* Custom scrollbar styling */
+.species-list-container::-webkit-scrollbar,
+.sidebar-area::-webkit-scrollbar,
+.canvas-area::-webkit-scrollbar {
+
+  width: 8px;
+}
+
+.species-list-container::-webkit-scrollbar-track,
+.sidebar-area::-webkit-scrollbar-track,
+.canvas-area::-webkit-scrollbar-track {
+  background: var(--bg-canvas);
+  border-radius: 4px;
+}
+
+.species-list-container::-webkit-scrollbar-thumb,
+.sidebar-area::-webkit-scrollbar-thumb,
+.canvas-area::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+.species-list-container::-webkit-scrollbar-thumb:hover,
+.sidebar-area::-webkit-scrollbar-thumb:hover,
+.canvas-area::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
 
 .species-group {
@@ -669,7 +722,7 @@ html, body {
 }
 
 /* ============================================
-   FOOTER (Fixed)
+   FOOTER - ALWAYS VISIBLE
    ============================================ */
 .app-footer {
   width: 100%;
@@ -679,11 +732,11 @@ html, body {
   justify-content: center;
   gap: 2rem;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem; /* Increased padding */
   font-size: 1rem;
   font-weight: 500;
   border-top: 2px solid #24e073;
-  margin-top: auto; /* Pushes footer to bottom */
+  margin-top: auto;
   flex-shrink: 0;
 }
 
@@ -700,71 +753,7 @@ html, body {
 }
 
 /* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 1024px) {
-  .builder-main-layout {
-    grid-template-columns: 1fr;
-  }
-  /* Allow sidebar to scroll nicely on mobile */
-  .sidebar-area {
-    border-left: none;
-    border-top: 1px solid var(--border-light);
-    height: auto;
-    max-height: 400px;
-  }
-  .builder-container {
-    height: auto; /* Allow full page scroll on mobile */
-    overflow: visible;
-  }
-  .canvas-area {
-    overflow: visible;
-    height: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-brand { font-size: 1.1rem; }
-  .nav-right { gap: 1rem; }
-  .nav-links { gap: 1rem; }
-  .nav-link { font-size: 0.875rem; }
-  
-  .hero h1 { font-size: 1.75rem; }
-  .hero p { font-size: 1rem; }
-  
-  .features { grid-template-columns: 1fr; }
-  
-  .builder-topbar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1rem;
-  }
-  
-  .topbar-controls {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .biome-select-compact,
-  .clear-btn-compact,
-  .predict-btn-compact {
-    width: 100%;
-  }
-  
-  .pyramid-type-bar { flex-wrap: wrap; }
-  .pyramid-container { padding: 1rem; }
-  .species-chips-grid { flex-direction: column; }
-  
-  .app-footer {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.8rem 1rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* ============================================
-   BEAUTIFUL ML PREDICTION MODAL
+   ML PREDICTION MODAL
    ============================================ */
 .prediction-overlay {
   position: fixed;
@@ -773,7 +762,6 @@ html, body {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
@@ -847,7 +835,6 @@ html, body {
   flex: 1;
 }
 
-/* Model Metadata */
 .prediction-meta-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -879,7 +866,6 @@ html, body {
   color: var(--accent-teal);
 }
 
-/* Confidence Bar */
 .confidence-bar-container {
   width: 100%;
   height: 8px;
@@ -904,7 +890,6 @@ html, body {
   margin-top: 0.25rem;
 }
 
-/* Species Predictions */
 .species-predictions { margin-top: 2rem; }
 
 .species-predictions h3 {
@@ -955,7 +940,6 @@ html, body {
   border-radius: var(--radius-sm);
 }
 
-/* Prediction Comparison */
 .prediction-comparison {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -989,7 +973,6 @@ html, body {
 .comparison-value.predicted { color: var(--accent-teal); }
 .comparison-arrow { font-size: 1.5rem; color: var(--text-secondary); }
 
-/* Change Badge */
 .prediction-change { text-align: center; }
 
 .change-badge {
@@ -1012,7 +995,6 @@ html, body {
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Prediction Summary */
 .prediction-summary {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -1028,10 +1010,67 @@ html, body {
   line-height: 1.6;
 }
 
-/* Dark mode adjustments */
 [data-theme="dark"] .prediction-summary {
   background: rgba(29, 78, 216, 0.15);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
 [data-theme="dark"] .prediction-summary p { color: #93c5fd; }
+
+/* ============================================
+   RESPONSIVE - MOBILE/TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .builder-main-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-area {
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    height: 400px; /* Fixed height on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-brand { font-size: 1.1rem; }
+  .nav-right { gap: 1rem; }
+  .nav-links { gap: 1rem; }
+  .nav-link { font-size: 0.875rem; }
+  
+  .hero h1 { font-size: 1.75rem; }
+  .hero p { font-size: 1rem; }
+  
+  .features { 
+    grid-template-columns: 1fr;
+    padding-bottom: 3rem; /* Extra space on mobile */
+  }
+  
+  .builder-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+  
+  .topbar-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .biome-select-compact,
+  .clear-btn-compact,
+  .predict-btn-compact {
+    width: 100%;
+  }
+  
+  .pyramid-type-bar { flex-wrap: wrap; }
+  .pyramid-container { padding: 1rem; }
+  .species-chips-grid { flex-direction: column; }
+  
+  .app-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+}
