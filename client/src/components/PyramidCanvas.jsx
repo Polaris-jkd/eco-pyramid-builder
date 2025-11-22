@@ -14,9 +14,8 @@ const TROPHIC_LABELS = {
   tertiary_consumer: '🦅 Tertiary Consumers'
 };
 
-export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, pyramidType = 'energy' }) {
+export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, pyramidType = 'energy', onError }) {
   const [dragOver, setDragOver] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const groupedSpecies = {
     tertiary_consumer: species.filter(s => s.trophicLevel === 'tertiary_consumer'),
@@ -26,8 +25,9 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
   };
 
   const showError = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 3000);
+    if (onError) {
+      onError(message);  // Use parent's error handler
+    }
   };
 
   const handleDragOver = (e, level) => {
@@ -116,21 +116,6 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
           <span className="pyramid-type-label">Type: {pyramidType}</span>
         </div>
         
-        {/* ✅ Error Message Banner */}
-        {errorMessage && (
-          <div style={{
-            background: '#fee2e2',
-            color: '#dc2626',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem',
-            fontSize: '0.875rem',
-            fontWeight: 500
-          }}>
-            {errorMessage}
-          </div>
-        )}
-
         <div className="empty-state">
           <div className="empty-state-icon">🌍</div>
           <h3>Build Your Ecosystem</h3>

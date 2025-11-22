@@ -11,6 +11,7 @@ export default function Builder() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const containerRef = useRef(null);
+  const [toastError, setToastError] = useState('');
 
   useEffect(() => {
     loadSpecies();
@@ -162,6 +163,12 @@ export default function Builder() {
     setPrediction(null);
   };
 
+  const showToastError = (message) => {
+    setToastError(message);
+    setTimeout(() => setToastError(''), 3000);
+  };
+
+
   return (
     <div 
       ref={containerRef}
@@ -262,6 +269,31 @@ export default function Builder() {
           position: 'relative'
         }}
       >
+        {/* FLOATING ERROR TOAST */}
+        {toastError && (
+          <div style={{
+            position: 'fixed',
+            top: '140px',  // Below toolbar
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            background: '#fee2e2',
+            color: '#dc2626',
+            padding: '1rem 2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            fontSize: '0.95rem',
+            fontWeight: 600,
+            maxWidth: '90%',
+            width: 'auto',
+            textAlign: 'center',
+            animation: 'slideDown 0.3s ease',
+            border: '2px solid #dc2626'
+          }}>
+            {toastError}
+          </div>
+        )}
+
         {/* LEFT: Pyramid Canvas */}
         <div 
           className="canvas-area" 
@@ -279,6 +311,7 @@ export default function Builder() {
             onRemoveSpecies={handleRemoveSpecies}
             onAddSpecies={handleAddSpecies}
             pyramidType={pyramidType}
+            onError={showToastError}
           />
         </div>
 
