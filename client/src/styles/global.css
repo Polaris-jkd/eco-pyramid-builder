@@ -1084,3 +1084,46 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* ============================================
+   NUCLEAR OVERRIDE - FORCE CONSTRAINED LAYOUT
+   ============================================ */
+.builder-container {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.builder-main-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 360px !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  max-height: 100% !important; /* NEW */
+}
+
+.canvas-area {
+  background: var(--bg-canvas) !important;
+  padding: 1.5rem !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important; /* NEW */
+}
+
+.sidebar-area {
+  background: var(--bg-white) !important;
+  border-left: 1px solid var(--border-light) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important; /* NEW */
+  display: flex !important;
+  flex-direction: column !important;
+}
+
