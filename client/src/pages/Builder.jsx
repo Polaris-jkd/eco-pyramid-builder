@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getAllSpecies, addSpecies, predictBiomass, deleteSpecies } from '../api/api';
 import SpeciesSidebar from '../components/SpeciesSidebar';
 import PyramidCanvas from '../components/PyramidCanvas';
@@ -10,9 +10,25 @@ export default function Builder() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const containerRef = useRef(null);
 
   useEffect(() => {
     loadSpecies();
+    
+    // Force height recalculation
+    const forceResize = () => {
+      if (containerRef.current) {
+        const navbarHeight = 60; // Approximate navbar height
+        const availableHeight = window.innerHeight - navbarHeight;
+        containerRef.current.style.height = `${availableHeight}px`;
+        containerRef.current.style.maxHeight = `${availableHeight}px`;
+      }
+    };
+
+    forceResize();
+    window.addEventListener('resize', forceResize);
+    
+    return () => window.removeEventListener('resize', forceResize);
   }, []);
 
   const loadSpecies = async () => {
@@ -126,15 +142,23 @@ export default function Builder() {
   };
 
   return (
-    <div className="builder-container" style={{
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: 0,
-      overflow: 'hidden'
-    }}>
+    <div 
+      ref={containerRef}
+      className="builder-container" 
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        top: '60px',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        background: 'var(--bg-canvas)'
+      }}
+    >
       {/* Top Controls Bar */}
-      <div className="builder-topbar">
+      <div className="builder-topbar" style={{ flexShrink: 0 }}>
         <div className="topbar-left">
           <h1 className="builder-title">🌿 Pyramid Builder</h1>
         </div>
@@ -168,7 +192,7 @@ export default function Builder() {
       </div>
 
       {/* Pyramid Type Selector */}
-      <div className="pyramid-type-bar">
+      <div className="pyramid-type-bar" style={{ flexShrink: 0 }}>
         <button
           className={`pyramid-type-btn ${pyramidType === 'energy' ? 'active' : ''}`}
           onClick={() => setPyramidType('energy')}
@@ -190,26 +214,32 @@ export default function Builder() {
       </div>
 
       {/* Error/Status Banner */}
-      {error && <div className="status-banner">{error}</div>}
+      {error && <div className="status-banner" style={{ flexShrink: 0 }}>{error}</div>}
 
-      {/* ✅ CRITICAL FIX: Main Layout with Inline Styles */}
-      <div className="builder-main-layout" style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 360px',
-        flex: 1,
-        minHeight: 0,
-        maxHeight: '100%',
-        overflow: 'hidden',
-        position: 'relative'
-      }}>
-        {/* LEFT: Pyramid Canvas - ✅ WRAPPED WITH HEIGHT CONSTRAINT */}
-        <div className="canvas-area" style={{
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          height: '100%',
-          maxHeight: '100%',
+      {/* Main Layout - FIXED POSITION */}
+      <div 
+        className="builder-main-layout" 
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 360px',
+          flex: 1,
+          minHeight: 0,
+          overflow: 'hidden',
           position: 'relative'
-        }}>
+        }}
+      >
+        {/* LEFT: Pyramid Canvas */}
+        <div 
+          className="canvas-area" 
+          style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            height: '100%',
+            position: 'relative',
+            background: 'var(--bg-canvas)',
+            padding: '1.5rem'
+          }}
+        >
           <PyramidCanvas
             species={species}
             onRemoveSpecies={handleRemoveSpecies}
@@ -218,20 +248,24 @@ export default function Builder() {
           />
         </div>
 
-        {/* RIGHT: Species Sidebar - ✅ ALREADY HAS INLINE STYLES */}
-        <div className="sidebar-area" style={{
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          height: '100%',
-          maxHeight: '100%',
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
+        {/* RIGHT: Species Sidebar */}
+        <div 
+          className="sidebar-area" 
+          style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'var(--bg-white)',
+            borderLeft: '1px solid var(--border-light)'
+          }}
+        >
           <SpeciesSidebar onAddSpecies={handleAddSpecies} />
         </div>
       </div>
 
-      {/* Prediction Results Modal */}
+      {/* Prediction Modal */}
       {prediction && (
         <div className="prediction-overlay" onClick={() => setPrediction(null)}>
           <div className="prediction-modal" onClick={(e) => e.stopPropagation()}>
