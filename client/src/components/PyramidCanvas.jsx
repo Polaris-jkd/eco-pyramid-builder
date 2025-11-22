@@ -14,7 +14,13 @@ const TROPHIC_LABELS = {
   tertiary_consumer: '🦅 Tertiary Consumers'
 };
 
-export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, pyramidType = 'energy', onError }) {
+export default function PyramidCanvas({ 
+  species, 
+  onRemoveSpecies, 
+  onAddSpecies, 
+  pyramidType = 'energy',
+  onError  // ✅ Receive error handler from parent
+}) {
   const [dragOver, setDragOver] = useState(null);
 
   const groupedSpecies = {
@@ -72,15 +78,13 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
     }
   };
 
-  // ✅ FIX: Handle drop on EMPTY canvas (entire pyramid area)
+  // ✅ Handle drop on EMPTY canvas
   const handleCanvasDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
     try {
       const speciesData = JSON.parse(e.dataTransfer.getData('species'));
-      
-      // Automatically add to correct level
       const correctLevel = speciesData.trophicLevel;
       await handleDrop(e, correctLevel);
     } catch (error) {
@@ -115,7 +119,7 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
           <h2>🔺 Ecological Pyramid</h2>
           <span className="pyramid-type-label">Type: {pyramidType}</span>
         </div>
-        
+
         <div className="empty-state">
           <div className="empty-state-icon">🌍</div>
           <h3>Build Your Ecosystem</h3>
@@ -134,22 +138,6 @@ export default function PyramidCanvas({ species, onRemoveSpecies, onAddSpecies, 
         <h2>🔺 Ecological Pyramid</h2>
         <span className="pyramid-type-label">Type: {pyramidType}</span>
       </div>
-
-      {/* ✅ Error Message Banner */}
-      {errorMessage && (
-        <div style={{
-          background: '#fee2e2',
-          color: '#dc2626',
-          padding: '0.75rem 1rem',
-          borderRadius: '8px',
-          marginBottom: '1rem',
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          animation: 'slideIn 0.3s ease'
-        }}>
-          {errorMessage}
-        </div>
-      )}
 
       <div className="pyramid-levels">
         {levels.map(level => {
