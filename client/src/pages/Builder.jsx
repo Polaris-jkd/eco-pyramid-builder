@@ -131,7 +131,7 @@ export default function Builder() {
       {/* Top Controls Bar */}
       <div className="builder-topbar">
         <div className="topbar-left">
-          {/* <h1 className="builder-title">🌿 Ecological Pyramid Builder</h1> */}
+          <h1 className="builder-title">🌿 Ecological Pyramid Builder</h1>
         </div>
         
         <div className="topbar-controls">
