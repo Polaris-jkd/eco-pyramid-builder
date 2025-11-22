@@ -1,14 +1,10 @@
 /* ============================================
-   CLEAN DESIGN SYSTEM
+   RESET & VARIABLES
    ============================================ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 :root {
@@ -44,8 +40,7 @@ html {
 
 html {
   height: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-  overflow-y: auto; /* Allow vertical scroll */
+  scroll-behavior: smooth;
 }
 
 body {
@@ -57,11 +52,10 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* ============================================
-   APP SHELL - FIXED LAYOUT
+   APP SHELL
    ============================================ */
 .app-shell {
   min-height: 100vh;
@@ -150,13 +144,13 @@ body {
 }
 
 /* ============================================
-   HOME PAGE - FIXED FOOTER VISIBILITY
+   HOME PAGE
    ============================================ */
 .main-content {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem 3rem 2rem; /* Added bottom padding */
+  padding: 0 2rem 4rem 2rem; /* Increased bottom padding */
   background: transparent;
   flex: 1;
   display: flex;
@@ -203,7 +197,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin: 3rem 0;
-  padding-bottom: 2rem; /* Extra space before footer */
+  padding-bottom: 3rem; /* Extra space before footer */
   width: 100%;
 }
 
@@ -234,16 +228,16 @@ body {
 }
 
 /* ============================================
-   BUILDER PAGE - FIXED SCROLLING
+   BUILDER PAGE - CRITICAL FIX
    ============================================ */
 .builder-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 60px); /* Account for navbar height */
-  min-height: 500px;
-  overflow: hidden; /* Prevent outer scroll */
+  height: 100%; /* Changed from calc() */
+  min-height: 0; /* CRITICAL for flexbox scrolling */
+  position: relative;
 }
 
 .builder-topbar {
@@ -352,44 +346,45 @@ body {
 }
 
 /* ============================================
-   BUILDER MAIN LAYOUT - SCROLLABLE AREAS
+   BUILDER MAIN LAYOUT - SCROLLABLE FIX
    ============================================ */
 .builder-main-layout {
   display: grid;
   grid-template-columns: 1fr 360px;
   flex: 1;
-  min-height: 0; /* CRITICAL: Allows flex children to shrink */
-  overflow: hidden;
+  min-height: 0; /* CRITICAL */
+  position: relative;
 }
 
-/* CANVAS AREA - NOW SCROLLABLE */
+/* CANVAS AREA - SCROLLABLE */
 .canvas-area {
   background: var(--bg-canvas);
-  overflow-y: auto; /* ✅ FIXED: Enable vertical scroll */
-  overflow-x: hidden;
   padding: 1.5rem;
-  height: 100%;
+  overflow-y: scroll !important; /* Force scrolling */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
 }
 
-/* SIDEBAR AREA - NOW SCROLLABLE */
+/* SIDEBAR AREA - SCROLLABLE */
 .sidebar-area {
   background: var(--bg-white);
   border-left: 1px solid var(--border-light);
-  overflow-y: auto; /* ✅ FIXED: Enable vertical scroll */
+  overflow-y: scroll !important; /* Force scrolling */
   overflow-x: hidden;
-  height: 100%;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
 }
 
 /* ============================================
-   SPECIES SIDEBAR - SCROLLABLE LIST
+   SPECIES SIDEBAR - FIXED SCROLLING
    ============================================ */
 .species-sidebar {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0; /* CRITICAL */
 }
 
 .species-sidebar h3 {
@@ -416,40 +411,52 @@ body {
   flex-shrink: 0;
 }
 
-/* ✅ FIXED: Scrollable species list container */
+/* ✅ CRITICAL FIX: Scrollable species list */
 .species-list-container {
   flex: 1;
-  overflow-y: auto; /* Enable scroll */
+  min-height: 0; /* CRITICAL */
+  overflow-y: scroll !important; /* Force scrolling */
   overflow-x: hidden;
-  padding-right: 0.5rem; /* Space for scrollbar */
+  padding-right: 0.5rem;
 }
 
-/* Custom scrollbar styling */
-.species-list-container::-webkit-scrollbar,
+/* Styled scrollbars */
+.canvas-area::-webkit-scrollbar,
 .sidebar-area::-webkit-scrollbar,
-.canvas-area::-webkit-scrollbar {
-
-  width: 8px;
+.species-list-container::-webkit-scrollbar {
+  width: 10px;
 }
 
-.species-list-container::-webkit-scrollbar-track,
+.canvas-area::-webkit-scrollbar-track,
 .sidebar-area::-webkit-scrollbar-track,
-.canvas-area::-webkit-scrollbar-track {
-  background: var(--bg-canvas);
-  border-radius: 4px;
+.species-list-container::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.species-list-container::-webkit-scrollbar-thumb,
+.canvas-area::-webkit-scrollbar-thumb,
 .sidebar-area::-webkit-scrollbar-thumb,
-.canvas-area::-webkit-scrollbar-thumb {
-  background: var(--border-light);
-  border-radius: 4px;
+.species-list-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
 }
 
-.species-list-container::-webkit-scrollbar-thumb:hover,
+.canvas-area::-webkit-scrollbar-thumb:hover,
 .sidebar-area::-webkit-scrollbar-thumb:hover,
-.canvas-area::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+.species-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode scrollbars */
+[data-theme="dark"] .canvas-area::-webkit-scrollbar-thumb,
+[data-theme="dark"] .sidebar-area::-webkit-scrollbar-thumb,
+[data-theme="dark"] .species-list-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .canvas-area::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .sidebar-area::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .species-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .species-group {
@@ -722,7 +729,7 @@ body {
 }
 
 /* ============================================
-   FOOTER - ALWAYS VISIBLE
+   FOOTER
    ============================================ */
 .app-footer {
   width: 100%;
@@ -732,7 +739,7 @@ body {
   justify-content: center;
   gap: 2rem;
   align-items: center;
-  padding: 1.5rem 2rem; /* Increased padding */
+  padding: 1.5rem 2rem;
   font-size: 1rem;
   font-weight: 500;
   border-top: 2px solid #24e073;
@@ -1018,7 +1025,7 @@ body {
 [data-theme="dark"] .prediction-summary p { color: #93c5fd; }
 
 /* ============================================
-   RESPONSIVE - MOBILE/TABLET
+   RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {
   .builder-main-layout {
@@ -1028,7 +1035,8 @@ body {
   .sidebar-area {
     border-left: none;
     border-top: 1px solid var(--border-light);
-    height: 400px; /* Fixed height on tablets */
+    height: 400px;
+    max-height: 50vh;
   }
 }
 
@@ -1043,7 +1051,7 @@ body {
   
   .features { 
     grid-template-columns: 1fr;
-    padding-bottom: 3rem; /* Extra space on mobile */
+    padding-bottom: 4rem;
   }
   
   .builder-topbar {
