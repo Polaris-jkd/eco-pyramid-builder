@@ -127,11 +127,18 @@ export default function Builder() {
   };
 
   return (
-    <div className="builder-container">
+    <div className="builder-container" style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 0,
+      overflow: 'hidden',
+      position: 'relative'
+    }}>
       {/* Top Controls Bar */}
       <div className="builder-topbar">
         <div className="topbar-left">
-          <h1 className="builder-title">🌿 Ecological Pyramid Builder</h1>
+          <h1 className="builder-title">🌿 Pyramid Builder</h1>
         </div>
         
         <div className="topbar-controls">
@@ -187,10 +194,20 @@ export default function Builder() {
       {/* Error/Status Banner */}
       {error && <div className="status-banner">{error}</div>}
 
-      {/* Main Layout: Canvas + Sidebar */}
-      <div className="builder-main-layout">
+      {/* Main Layout: Canvas + Sidebar - ✅ CRITICAL FIX */}
+      <div className="builder-main-layout" style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 360px',
+        flex: 1,
+        minHeight: 0,
+        overflow: 'hidden'
+      }}>
         {/* LEFT: Pyramid Canvas */}
-        <div className="canvas-area">
+        <div className="canvas-area" style={{
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          height: '100%'
+        }}>
           <PyramidCanvas
             species={species}
             onRemoveSpecies={handleRemoveSpecies}
@@ -200,12 +217,18 @@ export default function Builder() {
         </div>
 
         {/* RIGHT: Species Sidebar */}
-        <div className="sidebar-area">
+        <div className="sidebar-area" style={{
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
           <SpeciesSidebar onAddSpecies={handleAddSpecies} />
         </div>
       </div>
 
-      {/* Beautiful Prediction Results Panel */}
+      {/* Prediction Results Modal */}
       {prediction && (
         <div className="prediction-overlay" onClick={() => setPrediction(null)}>
           <div className="prediction-modal" onClick={(e) => e.stopPropagation()}>
