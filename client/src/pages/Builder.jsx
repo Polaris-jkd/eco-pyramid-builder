@@ -3,6 +3,9 @@ import { getAllSpecies, addSpecies, predictBiomass, deleteSpecies } from '../api
 import SpeciesSidebar from '../components/SpeciesSidebar';
 import PyramidCanvas from '../components/PyramidCanvas';
 import { BIOME_TEMPLATES } from '../data/biomes';
+import ScenarioSimulator from '../components/ScenarioSimulator';
+import CascadeAnalyzer from '../components/CascadeAnalyzer';
+import { generateEcosystemReport } from '../utils/ecosystemLogic';
 
 export default function Builder() {
   const [species, setSpecies] = useState([]);
@@ -12,6 +15,8 @@ export default function Builder() {
   const [error, setError] = useState('');
   const containerRef = useRef(null);
   const [toastError, setToastError] = useState('');
+  const [simulatedSpecies, setSimulatedSpecies] = useState(null);
+  const [ecosystemReport, setEcosystemReport] = useState(null);
 
   useEffect(() => {
     loadSpecies();
@@ -120,7 +125,6 @@ export default function Builder() {
     }
   };
 
-
   const handlePredict = async () => {
     if (species.length === 0) {
       setError('Add species to your pyramid first!');
@@ -168,6 +172,40 @@ export default function Builder() {
     setTimeout(() => setToastError(''), 3000);
   };
 
+  // ============================================
+  // HANDLERS FOR NEW FEATURES
+  // ============================================
+
+  const handleSimulationChange = async (modifiedSpecies) => {
+    try {
+      // Update the species in the pyramid
+      const updatedSpecies = species.map(s => 
+        s.name === modifiedSpecies.name ? modifiedSpecies : s
+      );
+      
+      // Update state to trigger pyramid re-render
+      setSimulatedSpecies(modifiedSpecies);
+      setSpecies(updatedSpecies);
+      
+      // Generate new ecosystem report
+      const report = generateEcosystemReport(updatedSpecies);
+      setEcosystemReport(report);
+      
+      console.log('✅ Simulation applied:', modifiedSpecies);
+    } catch (error) {
+      console.error('Error applying simulation:', error);
+      setError('Failed to apply simulation');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  const handleShowEcosystemReport = () => {
+    const report = generateEcosystemReport(species);
+    setEcosystemReport(report);
+    
+    // Show in console for debugging
+    console.log('📊 Ecosystem Report:', report);
+  };
 
   return (
     <div 
@@ -251,11 +289,51 @@ export default function Builder() {
           >
             {loading ? '🔮 Analyzing...' : '🤖 Predict Biomass'}
           </button>
+          
+          <button 
+            onClick={handleShowEcosystemReport}
+            style={{
+              padding: '0.5rem 1rem',
+              background: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: 'var(--radius-sm)',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '0.875rem',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            📊 Ecosystem Health
+          </button>
         </div>
       </div>
 
       {/* Error/Status Banner */}
       {error && <div className="status-banner" style={{ flexShrink: 0 }}>{error}</div>}
+
+      {/* Ecosystem Health Report Badge */}
+      {ecosystemReport && (
+        <div style={{
+          position: 'fixed',
+          top: '120px',
+          left: '20px',
+          background: 'white',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          fontSize: '0.85rem',
+          zIndex: 400,
+          border: `2px solid ${ecosystemReport.resilience > 70 ? '#22c55e' : ecosystemReport.resilience > 40 ? '#f59e0b' : '#ef4444'}`
+        }}>
+          <div style={{ fontWeight: 600, marginBottom: '4px' }}>
+            📊 Health Report
+          </div>
+          <div style={{ fontSize: '0.75rem', color: '#666' }}>
+            {ecosystemReport.totalSpecies} species | Resilience: {ecosystemReport.resilience}%
+          </div>
+        </div>
+      )}
 
       {/* Main Layout */}
       <div 
@@ -273,7 +351,7 @@ export default function Builder() {
         {toastError && (
           <div style={{
             position: 'fixed',
-            top: '140px',  // Below toolbar
+            top: '140px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
@@ -331,6 +409,17 @@ export default function Builder() {
           <SpeciesSidebar onAddSpecies={handleAddSpecies} />
         </div>
       </div>
+
+      {/* FLOATING COMPONENTS - OUTSIDE MAIN LAYOUT */}
+      <ScenarioSimulator 
+        species={species}
+        onSimulationChange={handleSimulationChange}
+        pyramidType={pyramidType}
+      />
+
+      <CascadeAnalyzer 
+        species={species} 
+      />
 
       {/* Prediction Modal */}
       {prediction && (
