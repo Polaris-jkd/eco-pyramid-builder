@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getAllSpecies, addSpecies, predictBiomass, deleteSpecies } from '../api/api';
 import SpeciesSidebar from '../components/SpeciesSidebar';
 import PyramidCanvas from '../components/PyramidCanvas';
-import { BIOME_TEMPLATES } from '../data/biomes';
 import ScenarioSimulator from '../components/ScenarioSimulator';
 import CascadeAnalyzer from '../components/CascadeAnalyzer';
+import { BIOME_TEMPLATES } from '../data/biomes';
 import { generateEcosystemReport } from '../utils/ecosystemLogic';
 
 export default function Builder() {
@@ -94,12 +94,10 @@ export default function Builder() {
     setError(`Loading ${biome.name}...`);
 
     try {
-      // ✅ FAST: Delete all at once
       await Promise.all(
         species.map(s => s._id ? deleteSpecies(s._id) : Promise.resolve())
       );
 
-      // ✅ FAST: Add all at once
       await Promise.all(
         biome.species.map(speciesData => {
           const newSpecies = {
@@ -115,7 +113,6 @@ export default function Builder() {
         })
       );
 
-      // Reload once at the end
       await loadSpecies();
       setError('');
     } catch (error) {
@@ -172,22 +169,19 @@ export default function Builder() {
     setTimeout(() => setToastError(''), 3000);
   };
 
-  // ============================================
-  // HANDLERS FOR NEW FEATURES
-  // ============================================
-
   const handleSimulationChange = async (modifiedSpecies) => {
     try {
-      // Update the species in the pyramid
       const updatedSpecies = species.map(s => 
         s.name === modifiedSpecies.name ? modifiedSpecies : s
       );
       
-      // Update state to trigger pyramid re-render
       setSimulatedSpecies(modifiedSpecies);
-      setSpecies(updatedSpecies);
       
-      // Generate new ecosystem report
+      await addSpecies({
+        ...modifiedSpecies,
+        isModified: true
+      });
+      
       const report = generateEcosystemReport(updatedSpecies);
       setEcosystemReport(report);
       
@@ -202,8 +196,6 @@ export default function Builder() {
   const handleShowEcosystemReport = () => {
     const report = generateEcosystemReport(species);
     setEcosystemReport(report);
-    
-    // Show in console for debugging
     console.log('📊 Ecosystem Report:', report);
   };
 
@@ -223,7 +215,7 @@ export default function Builder() {
         background: 'var(--bg-canvas)'
       }}
     >
-      {/* ✅ PROFESSIONAL UNIFIED TOOLBAR */}
+      {/* PROFESSIONAL UNIFIED TOOLBAR */}
       <div className="builder-unified-toolbar" style={{
         background: 'var(--bg-white)',
         borderBottom: '1px solid var(--border-light)',
@@ -312,29 +304,6 @@ export default function Builder() {
       {/* Error/Status Banner */}
       {error && <div className="status-banner" style={{ flexShrink: 0 }}>{error}</div>}
 
-      {/* Ecosystem Health Report Badge */}
-      {ecosystemReport && (
-        <div style={{
-          position: 'fixed',
-          top: '120px',
-          left: '20px',
-          background: 'white',
-          padding: '12px 16px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          fontSize: '0.85rem',
-          zIndex: 400,
-          border: `2px solid ${ecosystemReport.resilience > 70 ? '#22c55e' : ecosystemReport.resilience > 40 ? '#f59e0b' : '#ef4444'}`
-        }}>
-          <div style={{ fontWeight: 600, marginBottom: '4px' }}>
-            📊 Health Report
-          </div>
-          <div style={{ fontSize: '0.75rem', color: '#666' }}>
-            {ecosystemReport.totalSpecies} species | Resilience: {ecosystemReport.resilience}%
-          </div>
-        </div>
-      )}
-
       {/* Main Layout */}
       <div 
         className="builder-main-layout" 
@@ -409,17 +378,6 @@ export default function Builder() {
           <SpeciesSidebar onAddSpecies={handleAddSpecies} />
         </div>
       </div>
-
-      {/* FLOATING COMPONENTS - OUTSIDE MAIN LAYOUT */}
-      <ScenarioSimulator 
-        species={species}
-        onSimulationChange={handleSimulationChange}
-        pyramidType={pyramidType}
-      />
-
-      <CascadeAnalyzer 
-        species={species} 
-      />
 
       {/* Prediction Modal */}
       {prediction && (
@@ -496,6 +454,17 @@ export default function Builder() {
           </div>
         </div>
       )}
+
+      {/* NEW: Fixed Buttons for Simulator & Cascade */}
+      <ScenarioSimulator 
+        species={species}
+        onSimulationChange={handleSimulationChange}
+        pyramidType={pyramidType}
+      />
+
+      <CascadeAnalyzer 
+        species={species} 
+      />
     </div>
   );
 }
