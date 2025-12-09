@@ -171,21 +171,18 @@ export default function Builder() {
 
   const handleSimulationChange = async (modifiedSpecies) => {
     try {
+      setSimulatedSpecies(modifiedSpecies);
+      
       const updatedSpecies = species.map(s => 
         s.name === modifiedSpecies.name ? modifiedSpecies : s
       );
-      
-      setSimulatedSpecies(modifiedSpecies);
-      
-      await addSpecies({
-        ...modifiedSpecies,
-        isModified: true
-      });
       
       const report = generateEcosystemReport(updatedSpecies);
       setEcosystemReport(report);
       
       console.log('✅ Simulation applied:', modifiedSpecies);
+      setError('✅ Changes applied successfully!');
+      setTimeout(() => setError(''), 2000);
     } catch (error) {
       console.error('Error applying simulation:', error);
       setError('Failed to apply simulation');
@@ -194,6 +191,12 @@ export default function Builder() {
   };
 
   const handleShowEcosystemReport = () => {
+    if (species.length === 0) {
+      setError('⚠️ Add species to your pyramid first!');
+      setTimeout(() => setError(''), 3000);
+      return;
+    }
+
     const report = generateEcosystemReport(species);
     setEcosystemReport(report);
     console.log('📊 Ecosystem Report:', report);
@@ -289,12 +292,15 @@ export default function Builder() {
               background: '#10b981',
               color: 'white',
               border: 'none',
-              borderRadius: 'var(--radius-sm)',
+              borderRadius: '6px',
               cursor: 'pointer',
               fontWeight: 500,
               fontSize: '0.875rem',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap'
             }}
+            onMouseOver={(e) => e.target.style.background = '#059669'}
+            onMouseOut={(e) => e.target.style.background = '#10b981'}
           >
             📊 Ecosystem Health
           </button>
@@ -449,6 +455,58 @@ export default function Builder() {
                   🎯 The model predicts biomass values based on trophic relationships and energy transfer efficiency. 
                   Variations indicate ecosystem balance adjustments.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Ecosystem Health Report Modal */}
+      {ecosystemReport && (
+        <div className="prediction-overlay" onClick={() => setEcosystemReport(null)}>
+          <div className="prediction-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="prediction-modal-header">
+              <h2>📊 Ecosystem Health Report</h2>
+              <button className="close-modal-btn" onClick={() => setEcosystemReport(null)}>×</button>
+            </div>
+
+            <div className="prediction-modal-body">
+              <div className="prediction-meta-section">
+                <div className="meta-card">
+                  <span className="meta-label">Total Species</span>
+                  <span className="meta-value">{ecosystemReport.totalSpecies}</span>
+                </div>
+                <div className="meta-card">
+                  <span className="meta-label">Total Biomass</span>
+                  <span className="meta-value">{ecosystemReport.totalBiomass.toFixed(2)} kg/m²</span>
+                </div>
+                <div className="meta-card">
+                  <span className="meta-label">Trophic Levels</span>
+                  <span className="meta-value">{ecosystemReport.trophicLevels}</span>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '2rem' }}>
+                <h3>🎯 Health Metrics</h3>
+                <div style={{
+                  background: '#f0f9ff',
+                  padding: '1.5rem',
+                  borderRadius: '8px',
+                  border: '1px solid #bfdbfe'
+                }}>
+                  <p><strong>Energy Flow:</strong> {ecosystemReport.energyFlow || 'Not calculated'}</p>
+                  <p><strong>Biodiversity:</strong> {ecosystemReport.biodiversity || 'Stable'}</p>
+                  <p><strong>Balance Status:</strong> {ecosystemReport.balanceStatus || 'Ecosystem in progress'}</p>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '1.5rem' }}>
+                <h3>📈 Species Breakdown</h3>
+                {Object.entries(ecosystemReport.byTrophicLevel || {}).map(([level, count]) => (
+                  <p key={level}>
+                    <strong>{level.replace(/_/g, ' ')}:</strong> {count} species
+                  </p>
+                ))}
               </div>
             </div>
           </div>

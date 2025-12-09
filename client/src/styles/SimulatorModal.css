@@ -738,9 +738,14 @@ select.form-control {
 }
 
 
+/* ==========================================
+   SCENARIO SIMULATOR - BUTTON & MODAL
+   Light Mode & Dark Mode Support
+   ========================================== */
+
 .simulator-toggle-btn {
   position: fixed;
-  bottom: 100px;
+  bottom: 30px;
   right: 20px;
   z-index: 500;
   padding: var(--space-12) var(--space-24);
@@ -748,7 +753,7 @@ select.form-control {
   color: var(--color-btn-primary-text);
   border: none;
   border-radius: var(--radius-full);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   box-shadow: var(--shadow-md);
@@ -771,7 +776,7 @@ select.form-control {
 
 .simulator-toggle-btn:focus-visible {
   outline: var(--focus-outline);
-  box-shadow: var(--focus-ring), var(--shadow-md);
+  box-shadow: var(--focus-ring);
 }
 
 .simulator-overlay {
@@ -780,7 +785,7 @@ select.form-control {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(var(--color-slate-900-rgb), 0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   z-index: 2000;
   display: flex;
@@ -792,7 +797,6 @@ select.form-control {
 .simulator-modal {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
   box-shadow: var(--shadow-lg);
   max-width: 500px;
   width: 90%;
@@ -801,12 +805,14 @@ select.form-control {
   flex-direction: column;
   overflow: hidden;
   animation: slideUp 0.4s var(--ease-standard);
+  color: var(--color-text);
+  border: 1px solid var(--color-card-border);
 }
 
 .simulator-header {
   background: var(--color-primary);
   color: var(--color-btn-primary-text);
-  padding: var(--space-24) var(--space-32);
+  padding: var(--space-20) var(--space-32);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -833,7 +839,6 @@ select.form-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
 }
 
 .simulator-close-btn:hover {
@@ -857,7 +862,7 @@ select.form-control {
 }
 
 .simulator-section h4 {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--space-16);
   color: var(--color-text);
@@ -870,7 +875,7 @@ select.form-control {
 }
 
 .species-option {
-  background: var(--color-background);
+  background: var(--color-secondary);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-base);
   padding: var(--space-16);
@@ -880,11 +885,12 @@ select.form-control {
   gap: var(--space-8);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
+  color: var(--color-text);
 }
 
 .species-option:hover {
   border-color: var(--color-primary);
-  background: var(--color-secondary);
+  background: var(--color-secondary-hover);
 }
 
 .species-option:focus-visible {
@@ -899,11 +905,11 @@ select.form-control {
 }
 
 .species-option-icon {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-4xl);
 }
 
 .species-option-name {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   text-align: center;
 }
@@ -948,18 +954,12 @@ select.form-control {
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background: var(--color-primary-hover);
   transform: scale(1.2);
   box-shadow: var(--shadow-md);
 }
 
-.slider::-webkit-slider-thumb:active {
-  background: var(--color-primary-active);
-}
-
-.slider:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 2px;
+.slider::-webkit-slider-thumb:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 .slider::-moz-range-thumb {
@@ -974,13 +974,12 @@ select.form-control {
 }
 
 .slider::-moz-range-thumb:hover {
-  background: var(--color-primary-hover);
   transform: scale(1.2);
   box-shadow: var(--shadow-md);
 }
 
-.slider::-moz-range-thumb:active {
-  background: var(--color-primary-active);
+.slider::-moz-range-thumb:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 .adjustment-group small {
@@ -991,11 +990,12 @@ select.form-control {
 }
 
 .adjustment-summary {
-  background: var(--color-background);
-  border: 1px solid var(--color-card-border);
+  background: var(--color-secondary);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
   padding: var(--space-16);
   margin: var(--space-24) 0;
+  color: var(--color-text);
 }
 
 .adjustment-summary p {
@@ -1022,9 +1022,9 @@ select.form-control {
   border: none;
   border-radius: var(--radius-base);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
+  font-size: var(--font-size-sm);
 }
 
 .btn-apply {
@@ -1055,8 +1055,8 @@ select.form-control {
 }
 
 .btn-reset:hover {
-  background: var(--color-secondary-hover);
   border-color: var(--color-primary);
+  background: var(--color-secondary-hover);
 }
 
 .btn-reset:active {
@@ -1072,7 +1072,6 @@ select.form-control {
   text-align: center;
   padding: var(--space-32);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
 }
 
 @keyframes fadeIn {
@@ -1095,57 +1094,28 @@ select.form-control {
   }
 }
 
-@media (max-width: 640px) {
+/* Responsive breakpoint at 480px for mobile portrait */
+@media (max-width: 480px) {
   .simulator-toggle-btn {
-    bottom: 80px;
-    right: var(--space-10);
+    bottom: var(--space-16);
+    right: var(--space-16);
     padding: var(--space-10) var(--space-16);
     font-size: var(--font-size-sm);
+    gap: var(--space-6);
   }
 
   .simulator-modal {
     width: 95%;
-    max-height: 80vh;
+    max-height: 90vh;
+    border-radius: var(--radius-md);
   }
 
   .simulator-header {
-    padding: var(--space-16) var(--space-24);
+    padding: var(--space-16) var(--space-20);
   }
 
   .simulator-header h3 {
     font-size: var(--font-size-lg);
-  }
-
-  .simulator-body {
-    padding: var(--space-24);
-  }
-
-  .species-grid {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .simulator-toggle-btn {
-    bottom: 70px;
-    right: var(--space-8);
-    padding: var(--space-8) var(--space-12);
-    font-size: var(--font-size-xs);
-    gap: var(--space-4);
-  }
-
-  .simulator-modal {
-    width: 100%;
-    max-height: 90vh;
-    border-radius: var(--radius-base);
-  }
-
-  .simulator-header {
-    padding: var(--space-12) var(--space-16);
-  }
-
-  .simulator-header h3 {
-    font-size: var(--font-size-md);
   }
 
   .simulator-close-btn {
@@ -1155,7 +1125,7 @@ select.form-control {
   }
 
   .simulator-body {
-    padding: var(--space-16);
+    padding: var(--space-20);
   }
 
   .simulator-section {
@@ -1178,49 +1148,51 @@ select.form-control {
   }
 
   .species-option-icon {
-    font-size: var(--font-size-2xl);
-  }
-
-  .species-option-name {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-3xl);
   }
 
   .adjustment-group {
-    margin-bottom: var(--space-16);
-  }
-
-  .label-text {
-    font-size: var(--font-size-xs);
-    margin-bottom: var(--space-8);
-  }
-
-  .slider {
-    margin: var(--space-8) 0;
+    margin-bottom: var(--space-20);
   }
 
   .adjustment-summary {
     padding: var(--space-12);
-    margin: var(--space-16) 0;
-  }
-
-  .adjustment-summary p {
-    font-size: var(--font-size-xs);
+    margin: var(--space-20) 0;
   }
 
   .action-buttons {
     grid-template-columns: 1fr;
-    gap: var(--space-8);
-    margin-top: var(--space-16);
+    gap: var(--space-10);
   }
 
   .btn-apply,
   .btn-reset {
     padding: var(--space-10) var(--space-12);
-    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 640px) {
+  .simulator-toggle-btn {
+    bottom: 20px;
+    right: var(--space-10);
+    padding: var(--space-10) var(--space-16);
+    font-size: var(--font-size-sm);
   }
 
-  .simulator-empty {
+  .simulator-modal {
+    width: 95%;
+    max-height: 80vh;
+  }
+
+  .simulator-header {
+    padding: var(--space-16) var(--space-24);
+  }
+
+  .simulator-body {
     padding: var(--space-24);
-    font-size: var(--font-size-xs);
+  }
+
+  .species-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   }
 }

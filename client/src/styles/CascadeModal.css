@@ -738,20 +738,25 @@ select.form-control {
 }
 
 
+/* ==========================================
+   CASCADE ANALYZER - BUTTON & MODAL
+   Light Mode & Dark Mode Support
+   ========================================== */
+
 .cascade-toggle-btn {
   position: fixed;
-  bottom: 30px;
-  left: 20px;
+  bottom: 100px;
+  left: var(--space-20);
   z-index: 500;
   padding: var(--space-12) var(--space-24);
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: var(--color-white);
   border: none;
   border-radius: var(--radius-full);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   transition: all var(--duration-normal) var(--ease-standard);
   display: flex;
   align-items: center;
@@ -760,14 +765,17 @@ select.form-control {
 }
 
 .cascade-toggle-btn:hover {
-  background: var(--color-primary-hover);
   transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
 }
 
 .cascade-toggle-btn:active {
-  background: var(--color-primary-active);
   transform: translateY(-1px);
+}
+
+.cascade-toggle-btn:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
 }
 
 .cascade-overlay {
@@ -788,8 +796,7 @@ select.form-control {
 .cascade-modal {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   max-width: 550px;
   width: 90%;
   max-height: 85vh;
@@ -797,11 +804,13 @@ select.form-control {
   flex-direction: column;
   overflow: hidden;
   animation: slideUp 0.4s var(--ease-standard);
+  color: var(--color-text);
+  border: 1px solid var(--color-card-border);
 }
 
 .cascade-header {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: var(--color-white);
   padding: var(--space-24) var(--space-32);
   display: flex;
   justify-content: space-between;
@@ -813,14 +822,15 @@ select.form-control {
   margin: 0;
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-btn-primary-text);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .cascade-close-btn {
   background: rgba(255, 255, 255, 0.2);
   border: none;
-  color: var(--color-btn-primary-text);
-  font-size: var(--font-size-3xl);
+  color: var(--color-white);
+  font-size: var(--font-size-2xl);
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
@@ -836,6 +846,11 @@ select.form-control {
   transform: rotate(90deg);
 }
 
+.cascade-close-btn:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
 .cascade-body {
   padding: var(--space-32);
   overflow-y: auto;
@@ -847,6 +862,7 @@ select.form-control {
   color: var(--color-text-secondary);
   margin-bottom: var(--space-24);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
 }
 
 .species-selector-grid {
@@ -857,7 +873,7 @@ select.form-control {
 }
 
 .species-selector-btn {
-  background: var(--color-background);
+  background: var(--color-secondary);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-base);
   padding: var(--space-20) var(--space-12);
@@ -867,17 +883,24 @@ select.form-control {
   gap: var(--space-12);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
+  color: var(--color-text);
 }
 
 .species-selector-btn:hover {
   border-color: var(--color-primary);
-  background: var(--color-secondary);
+  background: var(--color-secondary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
+.species-selector-btn:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
 .selector-icon {
   font-size: var(--font-size-4xl);
+  line-height: 1;
 }
 
 .selector-name {
@@ -901,24 +924,24 @@ select.form-control {
   font-weight: var(--font-weight-semibold);
   width: 100%;
   justify-content: center;
+  color: var(--color-text);
   background: var(--color-secondary);
 }
 
 .species-removed-badge .icon {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-2xl);
 }
 
 .species-removed-badge .text {
   font-size: var(--font-size-lg);
-  color: var(--color-text);
 }
 
 .health-score-section {
   margin-bottom: var(--space-32);
   padding: var(--space-24);
-  background: var(--color-background);
+  background: var(--color-secondary);
   border-radius: var(--radius-base);
-  border: 1px solid var(--color-card-border-inner);
+  border: 1px solid var(--color-border);
 }
 
 .health-score-section h4 {
@@ -943,16 +966,16 @@ select.form-control {
   justify-content: center;
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-btn-primary-text);
+  color: var(--color-white);
   flex-shrink: 0;
   box-shadow: var(--shadow-md);
-  background: var(--color-primary);
 }
 
 .health-text p {
   margin: var(--space-8) 0;
   font-size: var(--font-size-base);
   color: var(--color-text);
+  line-height: var(--line-height-normal);
 }
 
 .health-status {
@@ -984,7 +1007,7 @@ select.form-control {
 }
 
 .impact-item {
-  background: var(--color-background);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
   padding: var(--space-12) var(--space-16);
@@ -992,7 +1015,12 @@ select.form-control {
   align-items: center;
   gap: var(--space-12);
   font-size: var(--font-size-sm);
+  color: var(--color-text);
   transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.impact-item:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .impact-item.critical {
@@ -1011,7 +1039,7 @@ select.form-control {
 }
 
 .impact-icon {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-2xl);
   flex-shrink: 0;
 }
 
@@ -1027,6 +1055,7 @@ select.form-control {
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   font-style: italic;
+  line-height: var(--line-height-normal);
 }
 
 .more-affected {
@@ -1041,8 +1070,8 @@ select.form-control {
   width: 100%;
   padding: var(--space-16);
   margin-top: var(--space-16);
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: var(--color-white);
   border: none;
   border-radius: var(--radius-base);
   font-weight: var(--font-weight-semibold);
@@ -1053,13 +1082,17 @@ select.form-control {
 }
 
 .btn-analyze-another:hover {
-  background: var(--color-primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
+.btn-analyze-another:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
 .btn-analyze-another:active {
-  background: var(--color-primary-active);
+  transform: translateY(0);
 }
 
 @keyframes fadeIn {
@@ -1082,12 +1115,12 @@ select.form-control {
   }
 }
 
-/* Mobile portrait breakpoint at 480px */
+/* Mobile Portrait - 480px breakpoint */
 @media (max-width: 480px) {
   .cascade-toggle-btn {
-    bottom: var(--space-16);
-    left: var(--space-12);
-    padding: var(--space-10) var(--space-16);
+    bottom: 70px;
+    left: var(--space-8);
+    padding: var(--space-8) var(--space-16);
     font-size: var(--font-size-sm);
     gap: var(--space-6);
   }
@@ -1103,13 +1136,13 @@ select.form-control {
   }
 
   .cascade-header h3 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
   }
 
   .cascade-close-btn {
     width: 32px;
     height: 32px;
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
   }
 
   .cascade-body {
@@ -1122,12 +1155,12 @@ select.form-control {
   }
 
   .species-selector-grid {
-    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: var(--space-8);
   }
 
   .species-selector-btn {
-    padding: var(--space-16) var(--space-8);
+    padding: var(--space-12) var(--space-8);
     gap: var(--space-8);
   }
 
@@ -1139,27 +1172,14 @@ select.form-control {
     font-size: var(--font-size-xs);
   }
 
-  .cascade-results-header {
-    margin-bottom: var(--space-24);
-  }
-
-  .species-removed-badge {
-    padding: var(--space-12) var(--space-16);
-    gap: var(--space-8);
-    flex-direction: column;
-  }
-
-  .species-removed-badge .icon {
-    font-size: var(--font-size-2xl);
-  }
-
-  .species-removed-badge .text {
-    font-size: var(--font-size-base);
-  }
-
   .health-score-section {
     padding: var(--space-16);
     margin-bottom: var(--space-24);
+  }
+
+  .health-score-section h4 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-12);
   }
 
   .health-score-display {
@@ -1186,6 +1206,19 @@ select.form-control {
     font-size: var(--font-size-xs);
   }
 
+  .species-removed-badge {
+    padding: var(--space-12) var(--space-16);
+    gap: var(--space-8);
+  }
+
+  .species-removed-badge .icon {
+    font-size: var(--font-size-xl);
+  }
+
+  .species-removed-badge .text {
+    font-size: var(--font-size-base);
+  }
+
   .cascade-category {
     margin-bottom: var(--space-20);
   }
@@ -1198,11 +1231,20 @@ select.form-control {
   .impact-item {
     padding: var(--space-10) var(--space-12);
     gap: var(--space-10);
-    font-size: var(--font-size-xs);
   }
 
   .impact-icon {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
+  }
+
+  .impact-name {
+    font-size: var(--font-size-sm);
+  }
+
+  .impact-loss,
+  .impact-reason,
+  .impact-benefit {
+    font-size: 10px;
   }
 
   .btn-analyze-another {
@@ -1211,11 +1253,11 @@ select.form-control {
   }
 }
 
-/* Tablet and small desktop breakpoint */
-@media (max-width: 640px) {
+/* Tablet and larger mobile landscape - 640px breakpoint */
+@media (max-width: 640px) and (min-width: 481px) {
   .cascade-toggle-btn {
-    bottom: 20px;
-    left: var(--space-12);
+    bottom: 80px;
+    left: var(--space-10);
     padding: var(--space-10) var(--space-16);
     font-size: var(--font-size-sm);
   }
@@ -1227,6 +1269,10 @@ select.form-control {
 
   .cascade-header {
     padding: var(--space-16) var(--space-24);
+  }
+
+  .cascade-header h3 {
+    font-size: var(--font-size-xl);
   }
 
   .cascade-body {

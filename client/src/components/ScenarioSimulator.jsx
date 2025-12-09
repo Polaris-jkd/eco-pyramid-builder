@@ -9,6 +9,7 @@ export default function ScenarioSimulator({ species, onSimulationChange, pyramid
     energy: 100,
     biomass: 100
   });
+  const [applyError, setApplyError] = useState('');
 
   const handleSpeciesSelect = (spec) => {
     setSelectedSpecies(spec);
@@ -17,6 +18,7 @@ export default function ScenarioSimulator({ species, onSimulationChange, pyramid
       energy: 100,
       biomass: 100
     });
+    setApplyError('');
   };
 
   const handleSliderChange = (key, value) => {
@@ -26,22 +28,35 @@ export default function ScenarioSimulator({ species, onSimulationChange, pyramid
     }));
   };
 
-  const handleApplyChanges = () => {
-    if (!selectedSpecies) return;
-
-    const modifiedSpecies = {
-      ...selectedSpecies,
-      population: Math.round(selectedSpecies.population * (adjustments.population / 100)),
-      energy: Math.round(selectedSpecies.energy * (adjustments.energy / 100) * 100) / 100,
-      biomass: Math.round(selectedSpecies.biomass * (adjustments.biomass / 100) * 100) / 100
-    };
-
-    if (onSimulationChange) {
-      onSimulationChange(modifiedSpecies);
+  const handleApplyChanges = async () => {
+    if (!selectedSpecies) {
+      setApplyError('Select a species first');
+      return;
     }
 
-    setIsOpen(false);
-    setSelectedSpecies(null);
+    try {
+      const modifiedSpecies = {
+        ...selectedSpecies,
+        population: Math.round(selectedSpecies.population * (adjustments.population / 100)),
+        energy: Math.round(selectedSpecies.energy * (adjustments.energy / 100) * 100) / 100,
+        biomass: Math.round(selectedSpecies.biomass * (adjustments.biomass / 100) * 100) / 100
+      };
+
+      if (onSimulationChange) {
+        await onSimulationChange(modifiedSpecies);
+        setApplyError('');
+        setIsOpen(false);
+        setSelectedSpecies(null);
+        setAdjustments({
+          population: 100,
+          energy: 100,
+          biomass: 100
+        });
+      }
+    } catch (error) {
+      console.error('Error applying simulation:', error);
+      setApplyError('Failed to apply changes. Please try again.');
+    }
   };
 
   const handleReset = () => {
@@ -50,6 +65,7 @@ export default function ScenarioSimulator({ species, onSimulationChange, pyramid
       energy: 100,
       biomass: 100
     });
+    setApplyError('');
   };
 
   return (
@@ -99,6 +115,21 @@ export default function ScenarioSimulator({ species, onSimulationChange, pyramid
                   ))}
                 </div>
               </div>
+
+              {/* Error Message */}
+              {applyError && (
+                <div style={{
+                  background: '#fee2e2',
+                  color: '#dc2626',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '6px',
+                  fontSize: '0.85rem',
+                  marginBottom: '1rem',
+                  border: '1px solid #fecaca'
+                }}>
+                  ⚠️ {applyError}
+                </div>
+              )}
 
               {/* Adjustments */}
               {selectedSpecies && (
